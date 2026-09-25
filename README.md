@@ -1,0 +1,1 @@
+# min-minecraft-module-finder
