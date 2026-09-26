@@ -1,7 +1,2364 @@
-<!doctype html> <html lang=en> <head> <meta charset=utf-8> <meta name=viewport content="width=device-width,initial-scale=1"> <title>@minecraft/* — minimum version finder</title> <style>:root{--bg:#0d1117;--panel:#161b22;--panel2:#0b0f14;--border:#30363d;--text:#e6edf3;--dim:#8b949e;--dim2:#6e7681;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--accent:#58a6ff;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}.wrap{max-width:920px;margin:0 auto;padding:0 16px}header{border-bottom:1px solid var(--border);padding:18px 0 0;position:sticky;top:0;background:rgba(13,17,23,.94);backdrop-filter:blur(8px);z-index:10}h1{font-size:14px;font-weight:600;margin:0 0 14px;letter-spacing:.01em}h1 b{color:var(--accent)}h1 span{color:var(--dim);font-weight:400}.tabs{display:flex;gap:6px;margin-bottom:12px;font-size:12px}.tabs button{padding:6px 12px;border:1px solid var(--border);background:0 0;color:var(--dim);border-radius:6px;cursor:pointer;font:inherit}.tabs button.active{background:var(--panel);color:var(--text);border-color:var(--dim2)}main{padding:20px 0 80px}.drop{border:1.5px dashed var(--border);border-radius:10px;padding:26px 16px;text-align:center;cursor:pointer;transition:.15s;background:var(--panel2)}.drop.over,.drop:hover{border-color:var(--accent);background:#111820}.drop .big{font-size:14px;color:var(--text);margin-bottom:6px}.drop .small{font-size:12px;color:var(--dim2);font-family:var(--mono)}.drop svg{display:block;margin:0 auto 10px;opacity:.5}textarea{width:100%;min-height:200px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:12px/1.6 var(--mono);padding:12px;outline:0;resize:vertical;transition:border-color .15s}textarea:focus{border-color:var(--accent)}.hidden{display:none!important}.stats{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font:12px/1.6 var(--mono);margin:16px 0;color:var(--dim)}.stats b{color:var(--text);font-weight:600}.chip{font-size:10px;padding:2px 8px;border-radius:10px;font-family:var(--mono);border:1px solid var(--border);background:var(--panel);color:var(--dim2)}.chip.bundle{color:#79c0ff;border-color:#1f3a56;background:#0e1a2a}.chip.multi{color:#ffa657;border-color:#3a2a15;background:#1f1508}.chip.warn{color:#f85149;border-color:#5a1f1f;background:#2a0a0a}.actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;align-items:center}button.action{background:#238636;border:1px solid #2ea043;color:#fff;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}button.action:hover:not(:disabled){background:#2ea043}button.action:disabled{opacity:.5;cursor:not-allowed}button.ghost{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 16px;font-size:13px;cursor:pointer}button.ghost:hover{border-color:var(--dim2)}label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim);font-family:var(--mono);cursor:pointer}input[type=checkbox]{accent-color:var(--accent)}.modules{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:12px}.modules-head{font:11px/1.6 var(--mono);color:var(--dim2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}.modules-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px}.mod{display:flex;align-items:center;gap:8px;font:12px/1.6 var(--mono);color:var(--text);padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--panel2);cursor:pointer;transition:.15s}.mod:hover{border-color:var(--dim2)}.mod.on{border-color:var(--accent);background:#0e1a2a}.mod input{flex:none}.mod .id{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mod .rm{color:var(--dim2);cursor:pointer;padding:0 4px;font-size:14px;line-height:1}.mod .rm:hover{color:var(--bad)}.modules-add{display:flex;gap:6px;margin-top:8px}.modules-add input{flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--text);font:12px var(--mono);padding:6px 10px;outline:0}.modules-add input:focus{border-color:var(--accent)}.modules-add button{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:0 12px;font-size:13px;cursor:pointer}.modules-add button:hover{border-color:var(--dim2)}.mod-section{margin-top:24px}.mod-section-header{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:12px;font:12px/1.6 var(--mono)}.mod-section-header .name{color:var(--accent);font-weight:600}.mod-section-header .status{color:var(--dim2)}.row{border:1px solid var(--border);border-left:3px solid var(--border);border-radius:7px;background:var(--panel);margin-bottom:6px;padding:9px 12px;display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:start;transition:opacity .15s,border-color .15s}.row[data-state=ok]{border-left-color:var(--ok)}.row[data-state=fail]{border-left-color:var(--bad);opacity:.85}.row[data-state=unknown]{border-left-color:var(--dim2);opacity:.55}.row[data-state=pending]{border-left-color:var(--dim2);opacity:.4}.row.min{background:#0d1a10;box-shadow:0 0 0 1px #2ea043 inset}.row.dup{opacity:.55}.ver{font:12px/1.6 var(--mono);color:var(--dim);display:flex;align-items:center;gap:6px;flex-wrap:wrap}.badge{font-size:9px;padding:2px 6px;border-radius:4px;background:#2ea043;color:#fff;font-weight:700;letter-spacing:.05em}.body{min-width:0;font:12px/1.6 var(--mono)}.status{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.status .icon{flex:none}.status .note{color:var(--dim);min-width:0;overflow-wrap:anywhere}.status .time{color:var(--dim2);font-size:11px;margin-left:auto;white-space:nowrap}.row[data-state=ok] .status .note{color:#7ee787}.row[data-state=fail] .status .note{color:#ff7b72}.cats{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.cat{font-size:10px;padding:1px 6px;border-radius:3px;background:#21262d;color:var(--dim);font-family:var(--mono)}.cat.member{color:#ffa657;background:#2a1c0e}.cat.signature{color:#ff9bce;background:#2a0f1f}.cat.export{color:#79c0ff;background:#0f1c2a}.cat.cascade{color:var(--dim2)}details{margin-top:6px}details summary{cursor:pointer;font:11px/1.6 var(--mono);color:var(--dim2);list-style:none;user-select:none}details summary::-webkit-details-marker{display:none}details summary:hover{color:var(--accent)}.errgroup{margin-top:8px;border-top:1px solid #21262d;padding-top:8px}.errgroup:first-child{border-top:none;padding-top:0}.errgroup .filehead{font:11px/1.6 var(--mono);color:#a5d6ff;margin-bottom:4px}.err{margin:4px 0;font:11px/1.5 var(--mono)}.err .head{color:#ff7b72}.err .head .code{color:var(--dim2)}.err .head .pos{color:var(--dim2)}.err pre{margin:2px 0 0 0;padding:3px 8px;background:#0d1117;border-radius:4px;border-left:2px solid #30363d;font:11px/1.5 var(--mono);color:#c9d1d9;overflow-x:auto;white-space:pre;overflow-y:hidden}.err pre .caret{color:#f85149;font-weight:700}.spinner{display:inline-block;width:9px;height:9px;border:1.5px solid var(--dim2);border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.bar{height:3px;background:#21262d;border-radius:2px;overflow:hidden;margin-top:14px}.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}.note-line{font:12px/1.6 var(--mono);color:var(--dim2);margin:10px 0}.note-line.warn{color:#e3b341}.note-line.bad{color:#f85149}</style> </head> <body> <header> <div class=wrap> <h1> <b>@minecraft/*</b> <span>· minimum version finder · tsc + esbuild</span> </h1> <div class=tabs> <button data-tab=folder class=active> Scan project </button> <button data-tab=paste>Paste code</button> </div> </div> </header> <main> <div class=wrap> <div class=modules> <div class=modules-head>Modules to check</div> <div class=modules-list id=modulesList></div> <div class=modules-add> <input id=customModule placeholder="e.g. @minecraft/server-admin" spellcheck=false> <button id=addCustom title="Add module"> + </button> </div> </div> <div id=tab-folder> <div class=drop id=drop style=margin-top:16px> <svg width=32 height=32 viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.5 stroke-linecap=round stroke-linejoin=round> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/> <polyline points="17 8 12 3 7 8"/> <line x1=12 y1=3 x2=12 y2=15 /> </svg> <div class=big>Drop your project folder here</div> <div class=small> or click to browse · .ts .tsx .js .jsx .mjs .cjs + manifest.json </div> <input type=file id=picker webkitdirectory multiple class=hidden> </div> </div> <div id=tab-paste class=hidden style=margin-top:16px> <textarea id=paste placeholder="// Paste code that imports from a @minecraft/* module
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width,initial-scale=1"
+		/>
+		<title>@minecraft/* — minimum version finder</title>
+		<style>
+			:root {
+				--bg: #0d1117;
+				--panel: #161b22;
+				--panel2: #0b0f14;
+				--border: #30363d;
+				--text: #e6edf3;
+				--dim: #8b949e;
+				--dim2: #6e7681;
+				--ok: #3fb950;
+				--warn: #d29922;
+				--bad: #f85149;
+				--accent: #58a6ff;
+				--mono:
+					ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				background: var(--bg);
+				color: var(--text);
+				font:
+					14px/1.5 -apple-system,
+					BlinkMacSystemFont,
+					"Segoe UI",
+					Roboto,
+					sans-serif;
+			}
+			.wrap {
+				max-width: 920px;
+				margin: 0 auto;
+				padding: 0 16px;
+			}
+			header {
+				border-bottom: 1px solid var(--border);
+				padding: 18px 0 0;
+				position: sticky;
+				top: 0;
+				background: rgba(13, 17, 23, 0.94);
+				backdrop-filter: blur(8px);
+				z-index: 10;
+			}
+			h1 {
+				font-size: 14px;
+				font-weight: 600;
+				margin: 0 0 14px;
+				letter-spacing: 0.01em;
+			}
+			h1 b {
+				color: var(--accent);
+			}
+			h1 span {
+				color: var(--dim);
+				font-weight: 400;
+			}
+			.tabs {
+				display: flex;
+				gap: 6px;
+				margin-bottom: 12px;
+				font-size: 12px;
+			}
+			.tabs button {
+				padding: 6px 12px;
+				border: 1px solid var(--border);
+				background: transparent;
+				color: var(--dim);
+				border-radius: 6px;
+				cursor: pointer;
+				font: inherit;
+			}
+			.tabs button.active {
+				background: var(--panel);
+				color: var(--text);
+				border-color: var(--dim2);
+			}
+			main {
+				padding: 20px 0 80px;
+			}
+			.drop {
+				border: 1.5px dashed var(--border);
+				border-radius: 10px;
+				padding: 26px 16px;
+				text-align: center;
+				cursor: pointer;
+				transition: 0.15s;
+				background: var(--panel2);
+			}
+			.drop:hover,
+			.drop.over {
+				border-color: var(--accent);
+				background: #111820;
+			}
+			.drop .big {
+				font-size: 14px;
+				color: var(--text);
+				margin-bottom: 6px;
+			}
+			.drop .small {
+				font-size: 12px;
+				color: var(--dim2);
+				font-family: var(--mono);
+			}
+			.drop svg {
+				display: block;
+				margin: 0 auto 10px;
+				opacity: 0.5;
+			}
+			textarea {
+				width: 100%;
+				min-height: 200px;
+				background: var(--panel2);
+				border: 1px solid var(--border);
+				border-radius: 8px;
+				color: var(--text);
+				font: 12px/1.6 var(--mono);
+				padding: 12px;
+				outline: none;
+				resize: vertical;
+				transition: border-color 0.15s;
+			}
+			textarea:focus {
+				border-color: var(--accent);
+			}
+			.hidden {
+				display: none !important;
+			}
+			.stats {
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+				align-items: center;
+				font: 12px/1.6 var(--mono);
+				margin: 16px 0;
+				color: var(--dim);
+			}
+			.stats b {
+				color: var(--text);
+				font-weight: 600;
+			}
+			.chip {
+				font-size: 10px;
+				padding: 2px 8px;
+				border-radius: 10px;
+				font-family: var(--mono);
+				border: 1px solid var(--border);
+				background: var(--panel);
+				color: var(--dim2);
+			}
+			.chip.bundle {
+				color: #79c0ff;
+				border-color: #1f3a56;
+				background: #0e1a2a;
+			}
+			.chip.multi {
+				color: #ffa657;
+				border-color: #3a2a15;
+				background: #1f1508;
+			}
+			.chip.warn {
+				color: #f85149;
+				border-color: #5a1f1f;
+				background: #2a0a0a;
+			}
+			.actions {
+				display: flex;
+				gap: 8px;
+				margin-top: 16px;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+			button.action {
+				background: #238636;
+				border: 1px solid #2ea043;
+				color: #fff;
+				border-radius: 8px;
+				padding: 10px 18px;
+				font-size: 13px;
+				font-weight: 600;
+				cursor: pointer;
+				transition: 0.15s;
+			}
+			button.action:hover:not(:disabled) {
+				background: #2ea043;
+			}
+			button.action:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+			button.ghost {
+				background: var(--panel);
+				border: 1px solid var(--border);
+				color: var(--text);
+				border-radius: 8px;
+				padding: 10px 16px;
+				font-size: 13px;
+				cursor: pointer;
+			}
+			button.ghost:hover {
+				border-color: var(--dim2);
+			}
+			label.chk {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				font-size: 12px;
+				color: var(--dim);
+				font-family: var(--mono);
+				cursor: pointer;
+			}
+			input[type="checkbox"] {
+				accent-color: var(--accent);
+			}
+			.modules {
+				background: var(--panel);
+				border: 1px solid var(--border);
+				border-radius: 10px;
+				padding: 12px 14px;
+				margin-top: 12px;
+			}
+			.modules-head {
+				font: 11px/1.6 var(--mono);
+				color: var(--dim2);
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+				margin-bottom: 8px;
+			}
+			.modules-list {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+				gap: 6px;
+			}
+			.mod {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				font: 12px/1.6 var(--mono);
+				color: var(--text);
+				padding: 5px 8px;
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				background: var(--panel2);
+				cursor: pointer;
+				transition: 0.15s;
+			}
+			.mod:hover {
+				border-color: var(--dim2);
+			}
+			.mod.on {
+				border-color: var(--accent);
+				background: #0e1a2a;
+			}
+			.mod input {
+				flex: none;
+			}
+			.mod .id {
+				flex: 1;
+				min-width: 0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			.mod .rm {
+				color: var(--dim2);
+				cursor: pointer;
+				padding: 0 4px;
+				font-size: 14px;
+				line-height: 1;
+			}
+			.mod .rm:hover {
+				color: var(--bad);
+			}
+			.modules-add {
+				display: flex;
+				gap: 6px;
+				margin-top: 8px;
+			}
+			.modules-add input {
+				flex: 1;
+				background: var(--panel2);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				color: var(--text);
+				font: 12px var(--mono);
+				padding: 6px 10px;
+				outline: none;
+			}
+			.modules-add input:focus {
+				border-color: var(--accent);
+			}
+			.modules-add button {
+				background: var(--panel2);
+				border: 1px solid var(--border);
+				color: var(--text);
+				border-radius: 6px;
+				padding: 0 12px;
+				font-size: 13px;
+				cursor: pointer;
+			}
+			.modules-add button:hover {
+				border-color: var(--dim2);
+			}
+			.mod-section {
+				margin-top: 24px;
+			}
+			.mod-section-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 8px 0;
+				border-bottom: 1px solid var(--border);
+				margin-bottom: 12px;
+				font: 12px/1.6 var(--mono);
+			}
+			.mod-section-header .name {
+				color: var(--accent);
+				font-weight: 600;
+			}
+			.mod-section-header .status {
+				color: var(--dim2);
+			}
+			.row {
+				border: 1px solid var(--border);
+				border-left: 3px solid var(--border);
+				border-radius: 7px;
+				background: var(--panel);
+				margin-bottom: 6px;
+				padding: 9px 12px;
+				display: grid;
+				grid-template-columns: 130px 1fr;
+				gap: 12px;
+				align-items: start;
+				transition:
+					opacity 0.15s,
+					border-color 0.15s;
+			}
+			.row[data-state="ok"] {
+				border-left-color: var(--ok);
+			}
+			.row[data-state="fail"] {
+				border-left-color: var(--bad);
+				opacity: 0.85;
+			}
+			.row[data-state="unknown"] {
+				border-left-color: var(--dim2);
+				opacity: 0.55;
+			}
+			.row[data-state="pending"] {
+				border-left-color: var(--dim2);
+				opacity: 0.4;
+			}
+			.row.min {
+				background: #0d1a10;
+				box-shadow: 0 0 0 1px #2ea043 inset;
+			}
+			.row.dup {
+				opacity: 0.55;
+			}
+			.ver {
+				font: 12px/1.6 var(--mono);
+				color: var(--dim);
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				flex-wrap: wrap;
+			}
+			.badge {
+				font-size: 9px;
+				padding: 2px 6px;
+				border-radius: 4px;
+				background: #2ea043;
+				color: #fff;
+				font-weight: 700;
+				letter-spacing: 0.05em;
+			}
+			.body {
+				min-width: 0;
+				font: 12px/1.6 var(--mono);
+			}
+			.status {
+				display: flex;
+				gap: 8px;
+				align-items: baseline;
+				flex-wrap: wrap;
+			}
+			.status .icon {
+				flex: none;
+			}
+			.status .note {
+				color: var(--dim);
+				min-width: 0;
+				overflow-wrap: anywhere;
+			}
+			.status .time {
+				color: var(--dim2);
+				font-size: 11px;
+				margin-left: auto;
+				white-space: nowrap;
+			}
+			.row[data-state="ok"] .status .note {
+				color: #7ee787;
+			}
+			.row[data-state="fail"] .status .note {
+				color: #ff7b72;
+			}
+			.cats {
+				display: flex;
+				gap: 6px;
+				flex-wrap: wrap;
+				margin-top: 4px;
+			}
+			.cat {
+				font-size: 10px;
+				padding: 1px 6px;
+				border-radius: 3px;
+				background: #21262d;
+				color: var(--dim);
+				font-family: var(--mono);
+			}
+			.cat.member {
+				color: #ffa657;
+				background: #2a1c0e;
+			}
+			.cat.signature {
+				color: #ff9bce;
+				background: #2a0f1f;
+			}
+			.cat.export {
+				color: #79c0ff;
+				background: #0f1c2a;
+			}
+			.cat.cascade {
+				color: var(--dim2);
+			}
+			details {
+				margin-top: 6px;
+			}
+			details summary {
+				cursor: pointer;
+				font: 11px/1.6 var(--mono);
+				color: var(--dim2);
+				list-style: none;
+				user-select: none;
+			}
+			details summary::-webkit-details-marker {
+				display: none;
+			}
+			details summary:hover {
+				color: var(--accent);
+			}
+			.errgroup {
+				margin-top: 8px;
+				border-top: 1px solid #21262d;
+				padding-top: 8px;
+			}
+			.errgroup:first-child {
+				border-top: none;
+				padding-top: 0;
+			}
+			.errgroup .filehead {
+				font: 11px/1.6 var(--mono);
+				color: #a5d6ff;
+				margin-bottom: 4px;
+			}
+			.err {
+				margin: 4px 0;
+				font: 11px/1.5 var(--mono);
+			}
+			.err .head {
+				color: #ff7b72;
+			}
+			.err .head .code {
+				color: var(--dim2);
+			}
+			.err .head .pos {
+				color: var(--dim2);
+			}
+			.err pre {
+				margin: 2px 0 0 0;
+				padding: 3px 8px;
+				background: #0d1117;
+				border-radius: 4px;
+				border-left: 2px solid #30363d;
+				font: 11px/1.5 var(--mono);
+				color: #c9d1d9;
+				overflow-x: auto;
+				white-space: pre;
+				overflow-y: hidden;
+			}
+			.err pre .caret {
+				color: #f85149;
+				font-weight: 700;
+			}
+			.spinner {
+				display: inline-block;
+				width: 9px;
+				height: 9px;
+				border: 1.5px solid var(--dim2);
+				border-top-color: transparent;
+				border-radius: 50%;
+				animation: spin 0.7s linear infinite;
+			}
+			@keyframes spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+			.bar {
+				height: 3px;
+				background: #21262d;
+				border-radius: 2px;
+				overflow: hidden;
+				margin-top: 14px;
+			}
+			.bar i {
+				display: block;
+				height: 100%;
+				background: var(--accent);
+				width: 0;
+				transition: width 0.2s;
+			}
+			.note-line {
+				font: 12px/1.6 var(--mono);
+				color: var(--dim2);
+				margin: 10px 0;
+			}
+			.note-line.warn {
+				color: #e3b341;
+			}
+			.note-line.bad {
+				color: #f85149;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<div class="wrap">
+				<h1>
+					<b>@minecraft/*</b>
+					<span>· minimum version finder · tsc + esbuild</span>
+				</h1>
+				<div class="tabs">
+					<button
+						data-tab="folder"
+						class="active"
+					>
+						Scan project
+					</button>
+					<button data-tab="paste">Paste code</button>
+				</div>
+			</div>
+		</header>
+
+		<main>
+			<div class="wrap">
+				<div class="modules">
+					<div class="modules-head">Modules to check</div>
+					<div
+						class="modules-list"
+						id="modulesList"
+					></div>
+					<div class="modules-add">
+						<input
+							id="customModule"
+							placeholder="e.g. @minecraft/server-admin"
+							spellcheck="false"
+						/>
+						<button
+							id="addCustom"
+							title="Add module"
+						>
+							+
+						</button>
+					</div>
+				</div>
+
+				<div id="tab-folder">
+					<div
+						class="drop"
+						id="drop"
+						style="margin-top: 16px"
+					>
+						<svg
+							width="32"
+							height="32"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+							<polyline points="17 8 12 3 7 8" />
+							<line
+								x1="12"
+								y1="3"
+								x2="12"
+								y2="15"
+							/>
+						</svg>
+						<div class="big">Drop your project folder here</div>
+						<div class="small">
+							or click to browse · .js .ts folders · .mcpack · .mcaddon
+						</div>
+						<input
+							type="file"
+							accept=".js,.ts,.mcpack,.mcaddon"
+							id="picker"
+							webkitdirectory
+							multiple
+							class="hidden"
+						/>
+					</div>
+				</div>
+
+				<div
+					id="tab-paste"
+					class="hidden"
+					style="margin-top: 16px"
+				>
+					<textarea
+						id="paste"
+						placeholder="// Paste code that imports from a @minecraft/* module
 import { world, system } from '@minecraft/server';
 
 world.afterEvents.playerSpawn.subscribe(ev => {
   const p = ev.player;
   if (p.isSneaking) system.run(() => p.onScreenDisplay.setTitle('shh'));
-});"></textarea> </div> <div class=stats id=stats></div> <div class="note-line hidden" id=tsNote></div> <div class="bar hidden" id=bar> <i></i> </div> <div class=actions id=actions style=display:none> <button class=action id=analyze> Find minimum versions </button> <button class=ghost id=reset> Reset </button> <label class=chk><input type=checkbox id=includePre> include beta / prerelease</label> </div> <div id=results style=margin-top:16px></div> </div> </main> <script type=module>const TS_VERSION="5.4.5",ESBUILD_VERSION="0.21.5",TS_MODULE_URL="https://esm.sh/typescript@5.4.5",ESBUILD_MODULE_URL="https://esm.sh/esbuild-wasm@0.21.5",ESBUILD_WASM_URL="https://cdn.jsdelivr.net/npm/esbuild-wasm@0.21.5/esbuild.wasm",TS_LIB_BASE="https://cdn.jsdelivr.net/npm/typescript@5.4.5/lib",CDN="https://cdn.jsdelivr.net/npm",DEFAULT_LIB="lib.es2020.d.ts",SKIP_DIRS=/(^|\/)(node_modules|\.git|dist|build|out|\.next|\.cache|coverage|\.vscode)(\/|$)/,OK_EXT=/\.(m?[jt]sx?|cjs)$/i,API_ERROR_CODES=new Set([2305,2304,2339,2551,2503,2724,2769,2345,2554,2353,2571,18046,18048,2576,2739,2741,2614,2335,2362,2363,2365]),CATEGORY={2305:"export",2306:"export",2304:"name",2339:"member",2551:"member",2503:"namespace",2345:"signature",2554:"signature",2769:"signature",2724:"signature",2353:"property",2571:"cascade",18046:"cascade",18048:"cascade",2576:"enum",2739:"assign",2741:"assign",2614:"call",2335:"operator",2362:"operator",2363:"operator",2365:"operator"},GLOBAL_STUB="\ndeclare var console: {\n  log(...args: any[]): void;\n  warn(...args: any[]): void;\n  error(...args: any[]): void;\n  info(...args: any[]): void;\n  debug(...args: any[]): void;\n  trace(...args: any[]): void;\n  time(label?: string): void;\n  timeEnd(label?: string): void;\n  assert(cond: any, ...args: any[]): void;\n  table(data: any): void;\n};\ndeclare function setTimeout(cb: (...args: any[]) => void, ms?: number, ...args: any[]): number;\ndeclare function clearTimeout(id?: number): void;\ndeclare function setInterval(cb: (...args: any[]) => void, ms?: number, ...args: any[]): number;\ndeclare function clearInterval(id?: number): void;\ndeclare function queueMicrotask(cb: () => void): void;\ndeclare var globalThis: any;\n";function toUnix(e){return String(e).replace(/\\/g,"/")}function normalizePath(e){const t=toUnix(e).split("/"),s=[];for(const e of t)""!==e&&"."!==e&&(".."!==e?s.push(e):s.length&&s.pop());return"/"+s.join("/")}const DEFAULT_MODULES=[{id:"@minecraft/server",label:"Server",on:!0},{id:"@minecraft/server-ui",label:"Server UI",on:!0},{id:"@minecraft/server-net",label:"Server Net",on:!0},{id:"@minecraft/server-gametest",label:"GameTest",on:!0},{id:"@minecraft/server-graphics",label:"Graphics",on:!0},{id:"@minecraft/debug-utilities",label:"Debug Utilities",on:!1},{id:"@minecraft/server-admin",label:"Server Admin",on:!1},{id:"@minecraft/server-editor",label:"Server Editor",on:!1}];let MODULES=DEFAULT_MODULES.map((e=>({...e})));function selectedModuleIds(){return MODULES.filter((e=>e.on)).map((e=>e.id))}function allModuleIds(){return MODULES.map((e=>e.id))}function buildModuleStub(e){return e.map((e=>`declare module '${e}';`)).join("\n")}let ts=null,esbuild=null,esbuildInitError=null;const libCache=new Map;let libsLoading=null;const versionsCache=new Map,dtsCache=new Map;async function ensureTs(){if(ts)return ts;const e=await import(TS_MODULE_URL);return ts=e.default||e,ts}async function ensureEsbuild(){if(esbuild)return esbuild;if(esbuildInitError)throw new Error(esbuildInitError);try{const e=await import(ESBUILD_MODULE_URL),t=e.default||e;return await t.initialize({wasmURL:ESBUILD_WASM_URL}),esbuild=t,esbuild}catch(e){throw esbuildInitError=e.message||String(e),e}}async function ensureLibs(){return libsLoading||(libsLoading=(async()=>{const e=new Set,t=[DEFAULT_LIB];for(;t.length;){const s=t.pop();if(e.has(s))continue;e.add(s);let n=null;try{const e=await fetch(`${TS_LIB_BASE}/${s}`);e.ok&&(n=(await e.text()).replace(/^\uFEFF/,""))}catch{}if(libCache.set(s,n),n){const e=/\/\/\/\s*<reference\s+lib=["']([^"']+)["']/g;let s;for(;s=e.exec(n);)t.push("lib."+s[1]+".d.ts")}}return libCache})(),libsLoading)}async function fetchVersions(e){if(versionsCache.has(e))return versionsCache.get(e);const t=await fetch(`https://data.jsdelivr.com/v1/packages/npm/${e}`),s=((await t.json()).versions||[]).map((e=>e.version));return versionsCache.set(e,s),s}async function fetchDts(e,t){const s=`${e}@${t}`;if(dtsCache.has(s))return dtsCache.get(s);let n=null;try{const s=await fetch(`${CDN}/${e}@${t}/index.d.ts`);s.ok&&(n=(await s.text()).replace(/^\uFEFF/,""),n.trim()||(n=null))}catch{}return dtsCache.set(s,n),n}const B64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";function decodeVLQ(e){const t=[];let s=0;for(;s<e.length;){let n,r=0,i=0;do{const a=B64.indexOf(e[s++]);if(a<0)return t;n=32&a,r+=(31&a)<<i,i+=5}while(n);const a=1&r;r>>>=1,t.push(a?-r:r)}return t}function parseSourceMap(e){const t=(e.mappings||"").split(";"),s=[];let n=0,r=0,i=0;for(const e of t){if(!e){s.push([]);continue}const t=[];let a=0;for(const s of e.split(",")){if(!s)continue;const e=decodeVLQ(s);e.length&&(a+=e[0],e.length>=4?(n+=e[1],r+=e[2],i+=e[3],t.push({genCol:a,srcIdx:n,srcLine:r,srcCol:i})):t.push({genCol:a}))}s.push(t)}return s}function normalizeSourcePath(e){if(!e)return e;if((e=toUnix(e)).startsWith("/virtual/"))return e;if(e.startsWith("/"))return"/virtual/user"+e;for(;e.startsWith("../");)e=e.slice(3);return"/virtual/user/"+(e=e.replace(/^\.\//,""))}let bundleResult=null,bundleError=null;function pickEntry(){if(manifestEntry&&userFiles.has(manifestEntry))return manifestEntry;const e=new Set,t=/(?:import|export)\s+(?:[^'"]*?\s+from\s+)?['"](\.[^'"]+)['"]/g,s=/\brequire\s*\(\s*['"](\.[^'"]+)['"]\s*\)/g;for(const[n,r]of userFiles){const i=n.replace(/\/[^/]+$/,"");for(const n of[t,s]){let t;for(n.lastIndex=0;t=n.exec(r);){const s=normalizePath(i+"/"+t[1]),n=[s];for(const e of[".ts",".tsx",".js",".jsx",".mjs",".cjs",".d.ts"])n.push(s+e);for(const e of[".ts",".tsx",".js",".jsx",".mjs",".cjs"])n.push(s+"/index"+e);for(const t of n)if(userFiles.has(t)){e.add(t);break}}}}const n=[...userFiles.keys()].filter((t=>!e.has(t)));return n.length?(n.sort(((e,t)=>(userFiles.get(t)?.length||0)-(userFiles.get(e)?.length||0))),n[0]):[...userFiles.keys()][0]||null}async function bundleUserFiles(){if(bundleResult=null,bundleError=null,!userFileCount)return;const e=pickEntry();if(!e)return void(bundleError="No entry file found");let t;try{t=await ensureEsbuild()}catch(e){return void(bundleError="esbuild load failed: "+(e.message||e))}const s=userFiles,n=e,r={name:"vfs",setup(e){e.onResolve({filter:/.*/},(e=>{const t=e.path;if(s.has(t))return{path:t,namespace:"vfs"};if(t.startsWith("@minecraft/"))return{path:t,external:!0};if(t.startsWith("node:"))return{path:t,external:!0};if(["fs","path","os","crypto","util","events","stream"].includes(t))return{path:t,external:!0};if(t.startsWith(".")||t.startsWith("/")){const r=e.importer||n,i=r.replace(/\/[^/]+$/,""),a=t.startsWith("/")?normalizePath(t):normalizePath(i+"/"+t),o=[a];for(const e of[".ts",".tsx",".js",".jsx",".mjs",".cjs",".d.ts"])o.push(a+e);for(const e of[".ts",".tsx",".js",".jsx",".mjs",".cjs"])o.push(a+"/index"+e);for(const e of o)if(s.has(e))return{path:e,namespace:"vfs"};return{errors:[{text:`Cannot resolve '${t}' from ${r}`}]}}return{path:t,external:!0}})),e.onLoad({filter:/.*/,namespace:"vfs"},(e=>{const t=s.get(e.path);if(null==t)return{errors:[{text:`No source for ${e.path}`}]};const n=(e.path.split(".").pop()||"").toLowerCase();return{contents:t,loader:"ts"===n?"ts":"tsx"===n?"tsx":"js"}}))}};let i;try{i=await t.build({entryPoints:[n],bundle:!0,write:!1,format:"esm",target:"es2020",sourcemap:"inline",sourcesContent:!0,logLevel:"silent",plugins:[r]})}catch(e){const t=e?.errors?.length?e.errors.map((e=>e.text||JSON.stringify(e))).join("; "):e.message||String(e);return void(bundleError="Bundle failed: "+t)}if(!i.outputFiles||!i.outputFiles.length)return void(bundleError="esbuild produced no output");const a=i.outputFiles[0].text,o=/\/\/# sourceMappingURL=data:application\/json[^,]*,([A-Za-z0-9+/=]+)/.exec(a);if(!o)return void(bundleError="Bundle has no inline sourcemap");let l;try{l=JSON.parse(atob(o[1]))}catch(e){return void(bundleError="Sourcemap parse failed: "+e)}bundleResult={source:a,map:l,decoded:parseSourceMap(l),entry:n}}function remapPosition(e,t){if(!bundleResult)return null;const s=bundleResult.decoded[e];if(!s||!s.length)return null;let n=null;for(const e of s){if(!(e.genCol<=t))break;n=e}if(!n||null==n.srcIdx)return null;return{file:normalizeSourcePath(bundleResult.map.sources[n.srcIdx]),line:n.srcLine+1,col:n.srcCol+1}}let lastProgram=null;function compileWithTypes(e,t){const s="/virtual/__types__/index.d.ts",n="/virtual/__types__/globals.d.ts",r="/virtual/__types__/other.d.ts",i="/virtual/__bundle__/input.ts",a=new Map,o=new Set;if(bundleResult)a.set(i,bundleResult.source),o.add(i);else for(const[e,t]of userFiles)a.set(e,t),o.add(e);a.set(s,t),a.set(n,GLOBAL_STUB);const l=allModuleIds().filter((t=>t!==e));a.set(r,buildModuleStub(l));const c={getSourceFile(e,t){const s=toUnix(e);if(a.has(s))return ts.createSourceFile(s,a.get(s),t,!0);const n=libCache.get(s.split("/").pop());return n?ts.createSourceFile(s,n,t,!0):void 0},getDefaultLibFileName:()=>DEFAULT_LIB,writeFile:()=>{},getCurrentDirectory:()=>"/",getCanonicalFileName:e=>e,useCaseSensitiveFileNames:()=>!0,getNewLine:()=>"\n",fileExists:e=>{const t=toUnix(e);if(a.has(t))return!0;return null!=libCache.get(t.split("/").pop())},readFile:e=>{const t=toUnix(e);if(a.has(t))return a.get(t);const s=libCache.get(t.split("/").pop());return null==s?void 0:s},directoryExists:()=>!0,getDirectories:()=>[],resolveModuleNames:(t,n)=>t.map((t=>((t,n)=>{if(t===e)return{resolvedFileName:s,extension:ts.Extension.Dts,isExternalLibraryImport:!0};if(t.startsWith("@minecraft/"))return{resolvedFileName:r,extension:ts.Extension.Dts,isExternalLibraryImport:!0};if(t.startsWith(".")||t.startsWith("/")){const e=normalizePath(toUnix(n).replace(/\/[^/]+$/,"")+"/"+t),s=[".ts",".tsx",".d.ts",".js",".jsx",".mjs",".cjs"],r=[e];for(const t of s)r.push(e+t);for(const t of s)r.push(e+"/index"+t);for(const e of r)if(a.has(e))return{resolvedFileName:e,extension:ts.Extension.Ts}}})(t,n)))},u={noEmit:!0,skipLibCheck:!0,strict:!1,noImplicitAny:!1,strictNullChecks:!1,target:ts.ScriptTarget.ES2020,module:ts.ModuleKind.ESNext,moduleResolution:ts.ModuleResolutionKind.Node10,allowJs:!0,checkJs:!0,types:[],noErrorTruncation:!0,esModuleInterop:!0,allowSyntheticDefaultImports:!0},d=[...o,n,r],p=ts.createProgram({rootNames:d,options:u,host:c,oldProgram:lastProgram||void 0});lastProgram=p;const f=[],m=!!bundleResult;for(const e of p.getSemanticDiagnostics()){if(e.category!==ts.DiagnosticCategory.Error)continue;if(!e.file)continue;const t=toUnix(e.file.fileName);if(!o.has(t))continue;if(!API_ERROR_CODES.has(e.code))continue;let s=0,n=0,r=t,i=e.start||0,a=e.length||0;if(m&&bundleResult)try{const t=e.file.getLineAndCharacterOfPosition(e.start||0),o=remapPosition(t.line,t.character);if(o){r=o.file,s=o.line,n=o.col;const t=userFiles.get(r);if(t){let r=1,o=0;for(;r<s&&o<t.length;){const e=t.indexOf("\n",o);if(-1===e)break;o=e+1,r++}i=o+Math.max(0,n-1),a=Math.max(1,e.length||1)}}}catch{}else try{const t=e.file.getLineAndCharacterOfPosition(e.start||0);s=t.line+1,n=t.character+1}catch{}f.push({file:r,start:i,length:a,code:e.code,message:ts.flattenDiagnosticMessageText(e.messageText," "),line:s,col:n})}return f}let noiseKeys=null;const verdictByContent=new Map,errorKey=e=>`${e.file}:${e.start}:${e.code}`;function buildNoiseBaseline(){if(noiseKeys)return noiseKeys;if(!userHasImport)return noiseKeys=new Set,noiseKeys;const e=compileWithTypes("__no_module__","");return noiseKeys=new Set(e.map(errorKey)),noiseKeys}function checkVersion(e,t){const s=`${e}@${t.length}:${t.slice(0,64)}`;if(verdictByContent.has(s))return verdictByContent.get(s);const n=compileWithTypes(e,t).filter((e=>!noiseKeys.has(errorKey(e)))),r={state:n.length?"fail":"ok",errors:n};return verdictByContent.set(s,r),r}function cmpVer(e,t){const[s,n]=e.split("-",2),[r,i]=t.split("-",2),a=s.split(".").map(Number),o=r.split(".").map(Number);for(let e=0;e<Math.max(a.length,o.length);e++){const t=a[e]||0,s=o[e]||0;if(t!==s)return t-s}return n&&!i?-1:!n&&i?1:n&&i?n<i?-1:n>i?1:0:0}const $=e=>document.querySelector(e);function renderModulePicker(){const e=$("#modulesList");e.innerHTML="";for(const t of MODULES){const s=document.createElement("label");s.className="mod"+(t.on?" on":"");const n=!DEFAULT_MODULES.some((e=>e.id===t.id));s.innerHTML=`\n      <input type="checkbox" ${t.on?"checked":""}>\n      <span class="id" title="${esc(t.id)}">${esc(t.id)}</span>\n      ${t.beta?'<span class="chip multi" style="font-size:9px;padding:1px 6px">beta</span>':""}\n      ${n?'<span class="rm" title="Remove">×</span>':""}\n    `;const r=s.querySelector("input");r.addEventListener("change",(()=>{t.on=r.checked,s.classList.toggle("on",t.on)}));const i=s.querySelector(".rm");i&&i.addEventListener("click",(e=>{e.preventDefault(),e.stopPropagation(),MODULES=MODULES.filter((e=>e.id!==t.id)),renderModulePicker()})),e.appendChild(s)}}function wireModulePicker(){const e=$("#customModule"),t=$("#addCustom"),s=()=>{const t=e.value.trim();if(t){if(!/^@minecraft\/[\w-]+$/.test(t)){e.value="";const t=e.placeholder;return e.placeholder="must start with @minecraft/",void setTimeout((()=>{e.placeholder=t}),1800)}MODULES.some((e=>e.id===t))?e.value="":(MODULES.push({id:t,label:t,on:!0}),e.value="",renderModulePicker())}};t.addEventListener("click",s),e.addEventListener("keydown",(e=>{"Enter"===e.key&&s()}))}let userFiles=new Map,userFileCount=0,userHasImport=!1,manifestEntry=null,currentRun=0,pasteRun=0;function resetCaches(){userFiles=new Map,userFileCount=0,userHasImport=!1,manifestEntry=null,bundleResult=null,bundleError=null,lastProgram=null,noiseKeys=null,verdictByContent.clear()}async function walkDirectoryEntry(e,t,s){if(e.isFile){const n=await new Promise(((t,s)=>e.file(t,s)));s.push({file:n,path:t+e.name})}else if(e.isDirectory){const n=e.createReader();for(;;){const r=await new Promise(((e,t)=>n.readEntries(e,t)));if(!r.length)break;for(const n of r)await walkDirectoryEntry(n,t+e.name+"/",s)}}}function wireFileIngestion(){const e=$("#drop"),t=$("#picker");e.addEventListener("click",(()=>t.click())),t.addEventListener("change",(()=>ingestFiles([...t.files].map((e=>({file:e,path:e.webkitRelativePath||e.name})))))),["dragenter","dragover"].forEach((t=>e.addEventListener(t,(t=>{t.preventDefault(),e.classList.add("over")})))),["dragleave","drop"].forEach((t=>e.addEventListener(t,(t=>{t.preventDefault(),e.classList.remove("over")})))),e.addEventListener("drop",(async e=>{const t=[];for(const s of[...e.dataTransfer.items]){const e=s.webkitGetAsEntry?.();e&&await walkDirectoryEntry(e,"",t)}t.length&&ingestFiles(t)})),$("#paste").addEventListener("input",(async e=>{const t=e.target.value,s=++pasteRun;if(resetCaches(),!t.trim())return updateStats(),updateTsNote(),$("#actions").style.display="none",void($("#results").innerHTML="");if(await new Promise((e=>setTimeout(e,0))),s!==pasteRun)return;const n=TS_SYNTAX_RE.test(t)?".ts":".js";userFiles=new Map([[`/virtual/user/input${n}`,t]]),userFileCount=1,userHasImport=/@minecraft\/[\w-]+/.test(t),updateStats(),updateTsNote(),$("#actions").style.display="flex",$("#results").innerHTML=""})),$("#reset").addEventListener("click",(()=>{resetCaches(),$("#stats").innerHTML="",$("#tsNote").classList.add("hidden"),$("#actions").style.display="none",$("#results").innerHTML="",$("#paste").value="",t.value=""}))}async function ingestFiles(e){resetCaches();const t=$("#bar"),s=t?t.querySelector("i"):null,n=e=>{s&&(s.style.width=e)};t&&t.classList.remove("hidden"),n("0%");let r=null;for(let t=0;t<e.length;t++){const{file:s,path:i}=e[t];if(t%20==0&&(n((t/e.length*100).toFixed(1)+"%"),await new Promise((e=>setTimeout(e)))),SKIP_DIRS.test("/"+i))continue;const a=/(^|\/)manifest\.json$/i.test(i);if(!OK_EXT.test(i)&&!a)continue;if(s.size>5242880)continue;const o=await s.text();a?r=o:(/@minecraft\/[\w-]+/.test(o)&&(userHasImport=!0),userFiles.set("/virtual/user/"+toUnix(i),o),userFileCount++)}if(r)try{const e=JSON.parse(r),t=(Array.isArray(e.modules)?e.modules:[]).find((e=>e&&"script"===e.type&&e.entry));if(t){const e=toUnix(String(t.entry).replace(/^\.\//,"")),s="/virtual/user/"+e;if(userFiles.has(s))manifestEntry=s;else{const t="/"+e;for(const e of userFiles.keys())if(e.endsWith(t)){manifestEntry=e;break}}}const s=Array.isArray(e.dependencies)?e.dependencies:[];for(const e of s){const t=e&&e.module_name;if(!t||!t.startsWith("@minecraft/"))continue;const s="string"==typeof e.version&&e.version.includes("beta"),n=MODULES.find((e=>e.id===t));n?(n.on=!0,s&&(n.beta=!0)):MODULES.push({id:t,label:t.replace("@minecraft/",""),on:!0,beta:s})}renderModulePicker()}catch{}if(n("100%"),t&&setTimeout((()=>t.classList.add("hidden")),400),userFileCount>1){try{await ensureEsbuild()}catch(e){bundleError="esbuild load failed: "+(e.message||e)}if(!bundleError)try{await bundleUserFiles()}catch(e){bundleError=String(e)}}updateStats(),updateTsNote(),$("#actions").style.display=userFileCount>0?"flex":"none",$("#results").innerHTML=""}const TS_SYNTAX_RE=/\b(interface\s+\w+|type\s+\w+\s*=|enum\s+\w+|namespace\s+\w+|declare\s+(module|const|function|class|namespace)|implements\s+\w+|<[A-Z]\w*(\s*,\s*[A-Z]\w*)*\s*>|\bas\s+[A-Z]\w*)/;function updateStats(){const e=$("#stats");if(!userFileCount)return void(e.innerHTML="");let t=`<span><b>${userFileCount}</b> file${1===userFileCount?"":"s"}</span>`;if(bundleResult){const e=(bundleResult.source.length/1024).toFixed(1),s=bundleResult.map.sources.length;t+=`<span class="chip bundle">bundled · ${s} source${1===s?"":"s"} · ${e} kB</span>`}else userFileCount>1&&bundleError?t+=`<span class="chip warn" title="${esc(bundleError)}">bundle failed</span>`:userFileCount>1&&(t+='<span class="chip multi">multi-file</span>');e.innerHTML=t}function updateTsNote(){const e=$("#tsNote");userFileCount?userHasImport?bundleError&&userFileCount>1?(e.classList.remove("hidden","bad"),e.classList.add("warn"),e.textContent="⚠  "+bundleError+" — falling back to per-file compile."):e.classList.add("hidden"):(e.classList.remove("hidden","bad"),e.classList.add("warn"),e.textContent="⚠  No file imports a @minecraft/* module — every version will pass trivially."):e.classList.add("hidden")}function esc(e){return String(e).replace(/[&<>"']/g,(e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e])))}function snippetFor(e,t,s){const n=userFiles.get(e);if(!n)return null;const r=n.lastIndexOf("\n",t-1)+1,i=n.indexOf("\n",t+(s||0)),a=-1===i?n.length:i,o=n.slice(r,a),l=t-r,c=Math.max(1,s||1),u=o.replace(/\t/g,"    ");return`${esc(u.slice(0,l))}<span class="caret">${esc(u.slice(l,l+c))||" "}</span>${esc(u.slice(l+c))}`}async function runAnalysis(){const e=selectedModuleIds();if(!userFileCount)return;const t=$("#results");if(!e.length)return void(t.innerHTML='<div class="note-line bad">Select at least one module above.</div>');const s=++currentRun,n=$("#analyze"),r=$("#includePre").checked;n.disabled=!0,n.textContent="Loading TypeScript…",t.innerHTML="";try{await ensureTs()}catch(e){return n.disabled=!1,n.textContent="Find minimum versions",void(t.innerHTML=`<div class="note-line bad">Failed to load TypeScript: ${esc(String(e))}</div>`)}if(s===currentRun)if(n.textContent="Loading stdlib…",await ensureLibs(),s===currentRun){n.textContent="Establishing baseline…",await new Promise((e=>setTimeout(e,0)));try{buildNoiseBaseline()}catch(e){return n.disabled=!1,n.textContent="Find minimum versions",void(t.innerHTML=`<div class="note-line bad">Baseline compile failed: ${esc(String(e))}</div>`)}if(s===currentRun){for(const i of e){if(s!==currentRun)return void(n.disabled=!1);await sweepModule(i,{includePre:r,run:s,resultsEl:t,btn:n})}n.disabled=!1,n.textContent="Find minimum versions"}else n.disabled=!1}else n.disabled=!1;else n.disabled=!1}async function sweepModule(e,t){const{includePre:s,run:n,resultsEl:r,btn:i}=t;let a;i.textContent=`Fetching ${e} versions…`;try{a=await fetchVersions(e)}catch{return void appendNote(r,e,"Failed to fetch version list.")}if(a=a.filter((e=>s||!e.includes("-"))),a.sort(cmpVer),!a.length)return void appendNote(r,e,"No published versions.");if(n!==t.run)return;const o=document.createElement("div");o.className="mod-section",o.innerHTML=`\n    <div class="mod-section-header">\n      <span class="name">${esc(e)}</span>\n      <span class="status">${a.length} versions</span>\n    </div>\n    <div class="rows"></div>\n  `,r.appendChild(o);const l=o.querySelector(".rows"),c=[];for(const e of a){const t=document.createElement("div");t.className="row",t.dataset.state="pending",t.dataset.version=e,t.innerHTML=`<div class="ver">${esc(e)}</div>\n      <div class="body"><div class="status"><span class="icon"><i class="spinner"></i></span><span class="note">checking…</span><span class="time"></span></div></div>`,l.appendChild(t),c.push(t)}const u=new Array(a.length).fill(null),d=new Set;for(let s=0;s<a.length;s++){if(n!==t.run)return;const r=a[s];i.textContent=`${e} · ${r} (${s+1}/${a.length})…`;const o=performance.now();let l,p=!1;try{const t=await fetchDts(e,r);null==t?l={state:"unknown",errors:null}:(p=d.has(t),l=checkVersion(e,t),d.add(t))}catch{l={state:"unknown",errors:null}}const f=performance.now()-o;if(n!==t.run)return;u[s]={result:l,elapsed:f,wasDup:p},renderRow(c[s],l,{elapsed:f,wasDup:p}),await new Promise((e=>setTimeout(e,0)))}const p=u.filter((e=>e&&"unknown"!==e.result.state));let f=null;if(p.length>0&&p.every((e=>"fail"===e.result.state)))for(const e of p){const t=new Set(e.result.errors.map(errorKey));if(null===f)f=t;else{for(const e of f)t.has(e)||f.delete(e);if(0===f.size)break}}null===f&&(f=new Set);const m=[];if(f.size>0)for(const e of p){const t=new Set;for(const s of e.result.errors){const e=errorKey(s);f.has(e)&&!t.has(e)&&(t.add(e),m.push(s))}if(m.length)break}const h=new Array(a.length).fill("unknown");for(let e=0;e<a.length;e++){const t=u[e];if(!t||"unknown"===t.result.state){h[e]="unknown";continue}const s=t.result.errors.filter((e=>!f.has(errorKey(e))));0===s.length?(h[e]="ok",renderRow(c[e],{state:"ok",errors:null},{elapsed:t.elapsed,wasDup:t.wasDup})):(h[e]="fail",renderRow(c[e],{state:"fail",errors:s},{elapsed:t.elapsed,wasDup:t.wasDup}))}const v=h.findIndex((e=>"ok"===e));if(v>=0){c[v].classList.add("min");const e=document.createElement("span");e.className="badge",e.textContent="MINIMUM",c[v].querySelector(".ver").appendChild(e),o.querySelector(".status").innerHTML=`<span style="color:var(--ok)">✔</span> minimum ${esc(a[v])}`}else h.every((e=>"unknown"===e))?o.querySelector(".status").textContent="no types available":o.querySelector(".status").innerHTML='<span style="color:var(--bad)">✕</span> no version satisfies';if(f.size>0){const e=new Map;for(const t of m){const s=`${t.file}:${t.line}:${t.code}`;e.has(s)||e.set(s,t)}const t=[...e.values()],s=document.createElement("div");s.className="note-line warn",s.style.marginTop="10px";let n=`${t.length} version-independent error${1===t.length?"":"s"} ignored (present in every version — likely bugs in your own code):`;n+='<details><summary>show</summary><ul style="margin:6px 0 0;padding-left:18px;line-height:1.7">';for(const e of t.slice(0,20)){const t=e.file.split("/").pop();n+=`<li>TS${e.code} · ${esc(t)}:${e.line}:${e.col} — ${esc(e.message)}</li>`}t.length>20&&(n+=`<li>… and ${t.length-20} more</li>`),n+="</ul></details>",s.innerHTML=n,o.appendChild(s)}}function appendNote(e,t,s){const n=document.createElement("div");n.className="mod-section",n.innerHTML=`\n    <div class="mod-section-header">\n      <span class="name">${esc(t)}</span>\n      <span class="status" style="color:var(--bad)">${esc(s)}</span>\n    </div>`,e.appendChild(n)}function renderRow(e,t,s){e.dataset.state=t.state,s&&s.wasDup?e.classList.add("dup"):e.classList.remove("dup");let n='<div class="status">';if(n+=`<span class="icon" style="color:${{ok:"var(--ok)",fail:"var(--bad)",unknown:"var(--dim2)"}[t.state]||"var(--dim2)"}">${{ok:"✔",fail:"✕",unknown:"–"}[t.state]||""}</span>`,n+='<span class="note">',"ok"===t.state)n+="type-checks cleanly";else if("unknown"===t.state)n+="type declarations unavailable";else if("fail"===t.state){const e=t.errors.length;n+=`${e} API error${1===e?"":"s"}`}if(n+="</span>",s?.wasDup&&(n+='<span class="cat cascade" title="same .d.ts as a previous version — result cached">reused</span>'),null==s?.elapsed||"unknown"===t.state||s.wasDup||(n+=`<span class="time">${s.elapsed.toFixed(0)} ms</span>`),n+="</div>","fail"===t.state&&t.errors.length){const e=new Map;for(const s of t.errors){const t=CATEGORY[s.code]||"other";e.set(t,(e.get(t)||0)+1)}n+='<div class="cats">';for(const[t,s]of[...e].sort(((e,t)=>t[1]-e[1])))n+=`<span class="cat ${t}">${t} · ${s}</span>`;n+="</div>";const s=new Map;for(const e of t.errors)s.has(e.file)||s.set(e.file,[]),s.get(e.file).push(e);n+=`<details><summary>show errors (${t.errors.length})</summary>`;let r=0;e:for(const[e,t]of s){n+=`<div class="errgroup"><div class="filehead">${esc(e.split("/").slice(-2).join("/"))}</div>`;for(const s of t){if(r>=60){n+='<div class="err">…</div>';break e}const t=snippetFor(e,s.start,s.length);n+='<div class="err">',n+=`<div class="head"><span class="code">TS${s.code}</span> <span class="pos">${s.line}:${s.col}</span> — ${esc(s.message)}</div>`,t&&(n+=`<pre>${t}</pre>`),n+="</div>",r++}n+="</div>"}t.errors.length>r&&(n+=`<div class="errgroup"><div class="filehead" style="color:var(--dim2)">… and ${t.errors.length-r} more</div></div>`),n+="</details>"}e.querySelector(".body").innerHTML=n}document.querySelectorAll(".tabs button").forEach((e=>{e.addEventListener("click",(()=>{document.querySelectorAll(".tabs button").forEach((t=>t.classList.toggle("active",t===e))),$("#tab-folder").classList.toggle("hidden","folder"!==e.dataset.tab),$("#tab-paste").classList.toggle("hidden","paste"!==e.dataset.tab)}))})),$("#analyze").addEventListener("click",runAnalysis),renderModulePicker(),wireModulePicker(),wireFileIngestion(),ensureTs().catch((()=>{}))</script> 
+});"
+					></textarea>
+				</div>
+
+				<div
+					class="stats"
+					id="stats"
+				></div>
+				<div
+					class="note-line hidden"
+					id="tsNote"
+				></div>
+				<div
+					class="bar hidden"
+					id="bar"
+				>
+					<i></i>
+				</div>
+
+				<div
+					class="actions"
+					id="actions"
+					style="display: none"
+				>
+					<button
+						class="action"
+						id="analyze"
+					>
+						Find minimum versions
+					</button>
+					<button
+						class="ghost"
+						id="reset"
+					>
+						Reset
+					</button>
+					<label class="chk">
+						<input
+							type="checkbox"
+							id="includePre"
+						/>
+						include beta / prerelease
+					</label>
+					<label class="chk">
+						<input
+							type="checkbox"
+							id="reverseOrder"
+						/>
+						newest first (stop on first error)
+					</label>
+				</div>
+
+				<div
+					id="results"
+					style="margin-top: 16px"
+				></div>
+			</div>
+		</main>
+
+		<script type="module">
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §1  CONFIG
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			const TS_VERSION = "5.4.5"
+			const ESBUILD_VERSION = "0.21.5"
+
+			const TS_MODULE_URL = `https://esm.sh/typescript@${TS_VERSION}`
+			const ESBUILD_MODULE_URL = `https://esm.sh/esbuild-wasm@${ESBUILD_VERSION}`
+			const ESBUILD_WASM_URL = `https://cdn.jsdelivr.net/npm/esbuild-wasm@${ESBUILD_VERSION}/esbuild.wasm`
+			const FFLATE_MODULE_URL = "https://esm.sh/fflate@0.8.2"
+			const TS_LIB_BASE = `https://cdn.jsdelivr.net/npm/typescript@${TS_VERSION}/lib`
+			const CDN = `https://cdn.jsdelivr.net/npm`
+
+			const DEFAULT_LIB = "lib.es2020.d.ts"
+
+			const SKIP_DIRS =
+				/(^|\/)(node_modules|\.git|dist|build|out|\.next|\.cache|coverage|\.vscode)(\/|$)/
+			const SOURCE_EXT = /\.(?:d\.ts|js|ts)$/i
+			const PACK_EXT = /\.(?:mcpack|mcaddon)$/i
+			const MAX_FILE_SIZE = 5 * 1024 * 1024
+			const MAX_PACK_SIZE = 25 * 1024 * 1024
+
+			/** TypeScript diagnostic codes that plausibly indicate an API mismatch. */
+			const API_ERROR_CODES = new Set([
+				2305, 2304, 2339, 2551, 2503, 2724, 2769, 2345, 2554, 2353, 2571, 18046,
+				18048, 2576, 2739, 2741, 2614, 2335, 2362, 2363, 2365,
+			])
+
+			/** Human-readable category labels for diagnostic codes. */
+			const CATEGORY = {
+				2305: "export",
+				2306: "export",
+				2304: "name",
+				2339: "member",
+				2551: "member",
+				2503: "namespace",
+				2345: "signature",
+				2554: "signature",
+				2769: "signature",
+				2724: "signature",
+				2353: "property",
+				2571: "cascade",
+				18046: "cascade",
+				18048: "cascade",
+				2576: "enum",
+				2739: "assign",
+				2741: "assign",
+				2614: "call",
+				2335: "operator",
+				2362: "operator",
+				2363: "operator",
+				2365: "operator",
+			}
+
+			/** Ambient globals the Minecraft script runtime provides. */
+			const GLOBAL_STUB = `
+declare var console: {
+  log(...args: any[]): void;
+  warn(...args: any[]): void;
+  error(...args: any[]): void;
+  info(...args: any[]): void;
+  debug(...args: any[]): void;
+  trace(...args: any[]): void;
+  time(label?: string): void;
+  timeEnd(label?: string): void;
+  assert(cond: any, ...args: any[]): void;
+  table(data: any): void;
+};
+declare function setTimeout(cb: (...args: any[]) => void, ms?: number, ...args: any[]): number;
+declare function clearTimeout(id?: number): void;
+declare function setInterval(cb: (...args: any[]) => void, ms?: number, ...args: any[]): number;
+declare function clearInterval(id?: number): void;
+declare function queueMicrotask(cb: () => void): void;
+declare var globalThis: any;
+`
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §2  PATH UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			function toUnix(p) {
+				return String(p).replace(/\\/g, "/")
+			}
+
+			function normalizePath(p) {
+				const parts = toUnix(p).split("/")
+				const out = []
+				for (const part of parts) {
+					if (part === "" || part === ".") continue
+					if (part === "..") {
+						if (out.length) out.pop()
+						continue
+					}
+					out.push(part)
+				}
+				return "/" + out.join("/")
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §3  MODULE REGISTRY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			const DEFAULT_MODULES = [
+				{ id: "@minecraft/server", label: "Server", on: true },
+				{ id: "@minecraft/server-ui", label: "Server UI", on: true },
+				{ id: "@minecraft/server-net", label: "Server Net", on: false },
+				{ id: "@minecraft/server-gametest", label: "GameTest", on: false },
+				{ id: "@minecraft/server-graphics", label: "Graphics", on: false },
+				{
+					id: "@minecraft/debug-utilities",
+					label: "Debug Utilities",
+					on: false,
+				},
+				{ id: "@minecraft/server-admin", label: "Server Admin", on: false },
+				{ id: "@minecraft/server-editor", label: "Server Editor", on: false },
+			]
+
+			let MODULES = DEFAULT_MODULES.map((m) => ({ ...m }))
+
+			function selectedModuleIds() {
+				return getSelectedModules()
+			}
+			function allModuleIds() {
+				return MODULES.map((m) => m.id)
+			}
+
+			function buildModuleStub(moduleIds) {
+				return moduleIds.map((id) => `declare module '${id}';`).join("\n")
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §4  ASSET LOADERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			let ts = null
+			let esbuild = null
+			let esbuildInitError = null
+			let fflate = null
+
+			const libCache = new Map()
+			let libsLoading = null
+
+			const versionsCache = new Map()
+			const dtsCache = new Map()
+
+			async function ensureTs() {
+				if (ts) return ts
+				const mod = await import(/* @vite-ignore */ TS_MODULE_URL)
+				ts = mod.default || mod
+				return ts
+			}
+
+			async function ensureFflate() {
+				if (fflate) return fflate
+				const mod = await import(/* @vite-ignore */ FFLATE_MODULE_URL)
+				fflate = mod.default || mod
+				return fflate
+			}
+
+			async function ensureEsbuild() {
+				if (esbuild) return esbuild
+				if (esbuildInitError) throw new Error(esbuildInitError)
+				try {
+					const mod = await import(/* @vite-ignore */ ESBUILD_MODULE_URL)
+					const api = mod.default || mod
+					await api.initialize({ wasmURL: ESBUILD_WASM_URL })
+					esbuild = api
+					return esbuild
+				} catch (e) {
+					esbuildInitError = e.message || String(e)
+					throw e
+				}
+			}
+
+			async function ensureLibs() {
+				if (libsLoading) return libsLoading
+				libsLoading = (async () => {
+					const seen = new Set()
+					const stack = [DEFAULT_LIB]
+					while (stack.length) {
+						const name = stack.pop()
+						if (seen.has(name)) continue
+						seen.add(name)
+						let text = null
+						try {
+							const res = await fetch(`${TS_LIB_BASE}/${name}`)
+							if (res.ok) text = (await res.text()).replace(/^\uFEFF/, "")
+						} catch {
+							/* miss */
+						}
+						libCache.set(name, text)
+						if (text) {
+							const re = /\/\/\/\s*<reference\s+lib=["']([^"']+)["']/g
+							let m
+							while ((m = re.exec(text))) stack.push("lib." + m[1] + ".d.ts")
+						}
+					}
+					return libCache
+				})()
+				return libsLoading
+			}
+
+			async function fetchVersions(moduleId) {
+				if (versionsCache.has(moduleId)) return versionsCache.get(moduleId)
+				const res = await fetch(
+					`https://data.jsdelivr.com/v1/packages/npm/${moduleId}`
+				)
+				const data = await res.json()
+				const versions = (data.versions || []).map((v) => v.version)
+				versionsCache.set(moduleId, versions)
+				return versions.reverse()
+			}
+
+			async function fetchDts(moduleId, version) {
+				const key = `${moduleId}@${version}`
+				if (dtsCache.has(key)) return dtsCache.get(key)
+				let text = null
+				try {
+					const res = await fetch(`${CDN}/${moduleId}@${version}/index.d.ts`)
+					if (res.ok) {
+						text = (await res.text()).replace(/^\uFEFF/, "")
+						if (!text.trim()) text = null
+					}
+				} catch {
+					/* miss */
+				}
+				dtsCache.set(key, text)
+				return text
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §5  SOURCE MAP (VLQ decoding)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			const B64 =
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+			function decodeVLQ(str) {
+				const out = []
+				let i = 0
+				while (i < str.length) {
+					let result = 0,
+						shift = 0,
+						cont
+					do {
+						const c = B64.indexOf(str[i++])
+						if (c < 0) return out
+						cont = c & 32
+						result += (c & 31) << shift
+						shift += 5
+					} while (cont)
+					const neg = result & 1
+					result >>>= 1
+					out.push(neg ? -result : result)
+				}
+				return out
+			}
+
+			function parseSourceMap(map) {
+				const lines = (map.mappings || "").split(";")
+				const out = []
+				let srcIdx = 0,
+					srcLine = 0,
+					srcCol = 0
+				for (const rawLine of lines) {
+					if (!rawLine) {
+						out.push([])
+						continue
+					}
+					const segs = []
+					let genCol = 0
+					for (const rawSeg of rawLine.split(",")) {
+						if (!rawSeg) continue
+						const vals = decodeVLQ(rawSeg)
+						if (!vals.length) continue
+						genCol += vals[0]
+						if (vals.length >= 4) {
+							srcIdx += vals[1]
+							srcLine += vals[2]
+							srcCol += vals[3]
+							segs.push({ genCol, srcIdx, srcLine, srcCol })
+						} else {
+							segs.push({ genCol })
+						}
+					}
+					out.push(segs)
+				}
+				return out
+			}
+
+			function normalizeSourcePath(s) {
+				if (!s) return s
+				s = toUnix(s)
+				if (s.startsWith("/virtual/")) return s
+				if (s.startsWith("/")) return "/virtual/user" + s
+				while (s.startsWith("../")) s = s.slice(3)
+				s = s.replace(/^\.\//, "")
+				return "/virtual/user/" + s
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §6  BUNDLER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			let bundleResult = null
+			let bundleError = null
+
+			function pickEntry() {
+				if (manifestEntry && userFiles.has(manifestEntry)) return manifestEntry
+
+				const imported = new Set()
+				const importRe =
+					/(?:import|export)\s+(?:[^'"]*?\s+from\s+)?['"](\.[^'"]+)['"]/g
+				const reqRe = /\brequire\s*\(\s*['"](\.[^'"]+)['"]\s*\)/g
+				for (const [file, src] of userFiles) {
+					const dir = file.replace(/\/[^/]+$/, "")
+					for (const re of [importRe, reqRe]) {
+						re.lastIndex = 0
+						let m
+						while ((m = re.exec(src))) {
+							const base = normalizePath(dir + "/" + m[1])
+							const cands = [base]
+							for (const e of [".ts", ".js"]) cands.push(base + e)
+							for (const e of [".ts", ".js"]) cands.push(base + "/index" + e)
+							for (const c of cands)
+								if (userFiles.has(c)) {
+									imported.add(c)
+									break
+								}
+						}
+					}
+				}
+				const roots = [...userFiles.keys()].filter((f) => !imported.has(f))
+				if (!roots.length) return [...userFiles.keys()][0] || null
+				roots.sort(
+					(a, b) =>
+						(userFiles.get(b)?.length || 0) - (userFiles.get(a)?.length || 0)
+				)
+				return roots[0]
+			}
+
+			async function bundleUserFiles() {
+				bundleResult = null
+				bundleError = null
+
+				if (!userFileCount) return
+				const entry = pickEntry()
+				if (!entry) {
+					bundleError = "No entry file found"
+					return
+				}
+
+				let api
+				try {
+					api = await ensureEsbuild()
+				} catch (e) {
+					bundleError = "esbuild load failed: " + (e.message || e)
+					return
+				}
+
+				const files = userFiles
+				const entryKey = entry
+
+				const vfsPlugin = {
+					name: "vfs",
+					setup(build) {
+						build.onResolve({ filter: /.*/ }, (args) => {
+							const spec = args.path
+
+							if (files.has(spec)) return { path: spec, namespace: "vfs" }
+
+							if (spec.startsWith("@minecraft/"))
+								return { path: spec, external: true }
+							if (spec.startsWith("node:"))
+								return { path: spec, external: true }
+							if (
+								[
+									"fs",
+									"path",
+									"os",
+									"crypto",
+									"util",
+									"events",
+									"stream",
+								].includes(spec)
+							) {
+								return { path: spec, external: true }
+							}
+
+							if (spec.startsWith(".") || spec.startsWith("/")) {
+								const containing = args.importer || entryKey
+								const dir = containing.replace(/\/[^/]+$/, "")
+								const base = spec.startsWith("/")
+									? normalizePath(spec)
+									: normalizePath(dir + "/" + spec)
+								const cands = [base]
+								for (const e of [
+									".ts",
+									".tsx",
+									".js",
+									".jsx",
+									".mjs",
+									".cjs",
+									".d.ts",
+								])
+									cands.push(base + e)
+								for (const e of [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"])
+									cands.push(base + "/index" + e)
+								for (const c of cands)
+									if (files.has(c)) return { path: c, namespace: "vfs" }
+								return {
+									errors: [
+										{ text: `Cannot resolve '${spec}' from ${containing}` },
+									],
+								}
+							}
+
+							return { path: spec, external: true }
+						})
+
+						build.onLoad({ filter: /.*/, namespace: "vfs" }, (args) => {
+							const source = files.get(args.path)
+							if (source == null)
+								return { errors: [{ text: `No source for ${args.path}` }] }
+							const ext = (args.path.split(".").pop() || "").toLowerCase()
+							const loader = ext === "ts" ? "ts" : ext === "tsx" ? "tsx" : "js"
+							return { contents: source, loader }
+						})
+					},
+				}
+
+				let result
+				try {
+					result = await api.build({
+						entryPoints: [entryKey],
+						bundle: true,
+						write: false,
+						format: "esm",
+						target: "es2020",
+						sourcemap: "inline",
+						sourcesContent: true,
+						logLevel: "silent",
+						plugins: [vfsPlugin],
+					})
+				} catch (e) {
+					const detail = e?.errors?.length
+						? e.errors.map((x) => x.text || JSON.stringify(x)).join("; ")
+						: e.message || String(e)
+					bundleError = "Bundle failed: " + detail
+					return
+				}
+
+				if (!result.outputFiles || !result.outputFiles.length) {
+					bundleError = "esbuild produced no output"
+					return
+				}
+
+				const code = result.outputFiles[0].text
+				const smMatch =
+					/\/\/# sourceMappingURL=data:application\/json[^,]*,([A-Za-z0-9+/=]+)/.exec(
+						code
+					)
+				if (!smMatch) {
+					bundleError = "Bundle has no inline sourcemap"
+					return
+				}
+
+				let map
+				try {
+					map = JSON.parse(atob(smMatch[1]))
+				} catch (e) {
+					bundleError = "Sourcemap parse failed: " + e
+					return
+				}
+
+				bundleResult = {
+					source: code,
+					map,
+					decoded: parseSourceMap(map),
+					entry: entryKey,
+				}
+			}
+
+			function remapPosition(genLine, genCol) {
+				if (!bundleResult) return null
+				const lineSegs = bundleResult.decoded[genLine]
+				if (!lineSegs || !lineSegs.length) return null
+				let best = null
+				for (const s of lineSegs) {
+					if (s.genCol <= genCol) best = s
+					else break
+				}
+				if (!best || best.srcIdx == null) return null
+				const src = bundleResult.map.sources[best.srcIdx]
+				return {
+					file: normalizeSourcePath(src),
+					line: best.srcLine + 1,
+					col: best.srcCol + 1,
+				}
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §7  COMPILER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			let lastProgram = null
+
+			function compileWithTypes(realModule, typesContent) {
+				const typesPath = "/virtual/__types__/index.d.ts"
+				const globalsPath = "/virtual/__types__/globals.d.ts"
+				const otherPath = "/virtual/__types__/other.d.ts"
+				const bundlePath = "/virtual/__bundle__/input.ts"
+
+				const files = new Map()
+				const userPaths = new Set()
+				if (bundleResult) {
+					files.set(bundlePath, bundleResult.source)
+					userPaths.add(bundlePath)
+				} else {
+					for (const [k, v] of userFiles) {
+						files.set(k, v)
+						userPaths.add(k)
+					}
+				}
+				files.set(typesPath, typesContent)
+				files.set(globalsPath, GLOBAL_STUB)
+
+				const stubbed = allModuleIds().filter((id) => id !== realModule)
+				files.set(otherPath, buildModuleStub(stubbed))
+
+				const resolveModule = (name, containing) => {
+					if (name === realModule) {
+						return {
+							resolvedFileName: typesPath,
+							extension: ts.Extension.Dts,
+							isExternalLibraryImport: true,
+						}
+					}
+					if (name.startsWith("@minecraft/")) {
+						return {
+							resolvedFileName: otherPath,
+							extension: ts.Extension.Dts,
+							isExternalLibraryImport: true,
+						}
+					}
+					if (name.startsWith(".") || name.startsWith("/")) {
+						const dir = toUnix(containing).replace(/\/[^/]+$/, "")
+						const base = normalizePath(dir + "/" + name)
+						const exts = [".ts", ".tsx", ".d.ts", ".js", ".jsx", ".mjs", ".cjs"]
+						const tries = [base]
+						for (const e of exts) tries.push(base + e)
+						for (const e of exts) tries.push(base + "/index" + e)
+						for (const t of tries)
+							if (files.has(t)) {
+								return { resolvedFileName: t, extension: ts.Extension.Ts }
+							}
+					}
+					return undefined
+				}
+
+				const host = {
+					getSourceFile(fileName, langVersion) {
+						const n = toUnix(fileName)
+						if (files.has(n))
+							return ts.createSourceFile(n, files.get(n), langVersion, true)
+						const lib = libCache.get(n.split("/").pop())
+						if (lib) return ts.createSourceFile(n, lib, langVersion, true)
+						return undefined
+					},
+					getDefaultLibFileName: () => DEFAULT_LIB,
+					writeFile: () => {},
+					getCurrentDirectory: () => "/",
+					getCanonicalFileName: (f) => f,
+					useCaseSensitiveFileNames: () => true,
+					getNewLine: () => "\n",
+					fileExists: (f) => {
+						const n = toUnix(f)
+						if (files.has(n)) return true
+						const lib = libCache.get(n.split("/").pop())
+						return lib != null
+					},
+					readFile: (f) => {
+						const n = toUnix(f)
+						if (files.has(n)) return files.get(n)
+						const lib = libCache.get(n.split("/").pop())
+						return lib == null ? undefined : lib
+					},
+					directoryExists: () => true,
+					getDirectories: () => [],
+					resolveModuleNames: (names, containing) =>
+						names.map((n) => resolveModule(n, containing)),
+				}
+
+				const options = {
+					noEmit: true,
+					skipLibCheck: true,
+					strict: false,
+					noImplicitAny: false,
+					strictNullChecks: false,
+					target: ts.ScriptTarget.ES2020,
+					module: ts.ModuleKind.ESNext,
+					moduleResolution: ts.ModuleResolutionKind.Node10,
+					allowJs: true,
+					checkJs: true,
+					types: [],
+					noErrorTruncation: true,
+					esModuleInterop: true,
+					allowSyntheticDefaultImports: true,
+				}
+
+				const rootNames = [...userPaths, globalsPath, otherPath]
+				const program = ts.createProgram({
+					rootNames,
+					options,
+					host,
+					oldProgram: lastProgram || undefined,
+				})
+				lastProgram = program
+
+				const out = []
+				const inBundleMode = !!bundleResult
+				for (const d of program.getSemanticDiagnostics()) {
+					if (d.category !== ts.DiagnosticCategory.Error) continue
+					if (!d.file) continue
+					const fn = toUnix(d.file.fileName)
+					if (!userPaths.has(fn)) continue
+					if (!API_ERROR_CODES.has(d.code)) continue
+
+					let line = 0,
+						col = 0,
+						fileOut = fn,
+						startOut = d.start || 0,
+						lenOut = d.length || 0
+
+					if (inBundleMode && bundleResult) {
+						try {
+							const pos = d.file.getLineAndCharacterOfPosition(d.start || 0)
+							const remapped = remapPosition(pos.line, pos.character)
+							if (remapped) {
+								fileOut = remapped.file
+								line = remapped.line
+								col = remapped.col
+								const origSrc = userFiles.get(fileOut)
+								if (origSrc) {
+									let ln = 1,
+										idx = 0
+									while (ln < line && idx < origSrc.length) {
+										const nl = origSrc.indexOf("\n", idx)
+										if (nl === -1) break
+										idx = nl + 1
+										ln++
+									}
+									startOut = idx + Math.max(0, col - 1)
+									lenOut = Math.max(1, d.length || 1)
+								}
+							}
+						} catch {
+							/* fall back */
+						}
+					} else {
+						try {
+							const pos = d.file.getLineAndCharacterOfPosition(d.start || 0)
+							line = pos.line + 1
+							col = pos.character + 1
+						} catch {
+							/* ignore */
+						}
+					}
+
+					out.push({
+						file: fileOut,
+						start: startOut,
+						length: lenOut,
+						code: d.code,
+						message: ts.flattenDiagnosticMessageText(d.messageText, " "),
+						line,
+						col,
+					})
+				}
+				return out
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §8  ANALYSIS ENGINE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			let noiseKeys = null
+			const verdictByContent = new Map()
+			const errorKey = (e) => `${e.file}:${e.start}:${e.code}`
+
+			function buildNoiseBaseline() {
+				if (noiseKeys) return noiseKeys
+				if (!userHasImport) {
+					noiseKeys = new Set()
+					return noiseKeys
+				}
+				const noise = compileWithTypes("__no_module__", "")
+				noiseKeys = new Set(noise.map(errorKey))
+				return noiseKeys
+			}
+
+			function checkVersion(moduleId, dtsContent) {
+				const cacheKey = `${moduleId}@${dtsContent.length}:${dtsContent.slice(0, 64)}`
+				if (verdictByContent.has(cacheKey))
+					return verdictByContent.get(cacheKey)
+				const all = compileWithTypes(moduleId, dtsContent)
+				const errors = all.filter((e) => !noiseKeys.has(errorKey(e)))
+				const result = { state: errors.length ? "fail" : "ok", errors }
+				verdictByContent.set(cacheKey, result)
+				return result
+			}
+
+			function cmpVer(a, b) {
+				const [am, ap] = a.split("-", 2)
+				const [bm, bp] = b.split("-", 2)
+				const pa = am.split(".").map(Number)
+				const pb = bm.split(".").map(Number)
+				for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+					const x = pa[i] || 0,
+						y = pb[i] || 0
+					if (x !== y) return x - y
+				}
+				if (ap && !bp) return -1
+				if (!ap && bp) return 1
+				if (ap && bp) return ap < bp ? -1 : ap > bp ? 1 : 0
+				return 0
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §9  MODULE PICKER UI
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			const $ = (sel) => document.querySelector(sel)
+			const nextFrame = () => new Promise((resolve) => setTimeout(resolve, 0))
+
+			function getSelectedModules() {
+				return MODULES.filter((module) => module.on).map((module) => module.id)
+			}
+
+			function renderModulePicker() {
+				const list = $("#modulesList")
+				list.innerHTML = ""
+				for (const m of MODULES) {
+					const el = document.createElement("label")
+					el.className = "mod" + (m.on ? " on" : "")
+					const removable = !DEFAULT_MODULES.some((d) => d.id === m.id)
+					el.innerHTML = `
+      <input type="checkbox" ${m.on ? "checked" : ""}>
+      <span class="id" title="${esc(m.id)}">${esc(m.id)}</span>
+      ${m.beta ? '<span class="chip multi" style="font-size:9px;padding:1px 6px">beta</span>' : ""}
+      ${removable ? '<span class="rm" title="Remove">×</span>' : ""}
+    `
+					const cb = el.querySelector("input")
+					cb.addEventListener("change", () => {
+						m.on = cb.checked
+						el.classList.toggle("on", m.on)
+					})
+					const rm = el.querySelector(".rm")
+					if (rm)
+						rm.addEventListener("click", (e) => {
+							e.preventDefault()
+							e.stopPropagation()
+							MODULES = MODULES.filter((x) => x.id !== m.id)
+							renderModulePicker()
+						})
+					list.appendChild(el)
+				}
+			}
+
+			function wireModulePicker() {
+				const input = $("#customModule")
+				const btn = $("#addCustom")
+				const add = () => {
+					const id = input.value.trim()
+					if (!id) return
+					if (!/^@minecraft\/[\w-]+$/.test(id)) {
+						input.value = ""
+						const prev = input.placeholder
+						input.placeholder = "must start with @minecraft/"
+						setTimeout(() => {
+							input.placeholder = prev
+						}, 1800)
+						return
+					}
+					if (MODULES.some((m) => m.id === id)) {
+						input.value = ""
+						return
+					}
+					MODULES.push({ id, label: id, on: true })
+					input.value = ""
+					renderModulePicker()
+				}
+				btn.addEventListener("click", add)
+				input.addEventListener("keydown", (e) => {
+					if (e.key === "Enter") add()
+				})
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §10  FILE INGESTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			let userFiles = new Map()
+			let userFileCount = 0
+			let userHasImport = false
+			let manifestEntry = null
+			let currentRun = 0
+			let pasteRun = 0
+
+			function resetCaches() {
+				userFiles = new Map()
+				userFileCount = 0
+				userHasImport = false
+				manifestEntry = null
+				bundleResult = null
+				bundleError = null
+				lastProgram = null
+				noiseKeys = null
+				verdictByContent.clear()
+				for (const m of MODULES) delete m.targetVersion
+			}
+
+			async function walkDirectoryEntry(entry, path, out) {
+				if (entry.isFile) {
+					const f = await new Promise((res, rej) => entry.file(res, rej))
+					out.push({ file: f, path: path + entry.name })
+				} else if (entry.isDirectory) {
+					const rd = entry.createReader()
+					while (true) {
+						const batch = await new Promise((res, rej) =>
+							rd.readEntries(res, rej)
+						)
+						if (!batch.length) break
+						for (const en of batch)
+							await walkDirectoryEntry(en, path + entry.name + "/", out)
+					}
+				}
+			}
+
+			function wireFileIngestion() {
+				const drop = $("#drop")
+				const picker = $("#picker")
+
+				drop.addEventListener("click", () => picker.click())
+				picker.addEventListener("change", () =>
+					ingestFiles(
+						[...picker.files].map((f) => ({
+							file: f,
+							path: f.webkitRelativePath || f.name,
+						}))
+					)
+				)
+				;["dragenter", "dragover"].forEach((ev) =>
+					drop.addEventListener(ev, (e) => {
+						e.preventDefault()
+						drop.classList.add("over")
+					})
+				)
+				;["dragleave", "drop"].forEach((ev) =>
+					drop.addEventListener(ev, (e) => {
+						e.preventDefault()
+						drop.classList.remove("over")
+					})
+				)
+				drop.addEventListener("drop", async (e) => {
+					const out = []
+					for (const item of [...e.dataTransfer.items]) {
+						const entry = item.webkitGetAsEntry?.()
+						if (entry) await walkDirectoryEntry(entry, "", out)
+					}
+					if (out.length) ingestFiles(out)
+				})
+
+				$("#paste").addEventListener("input", async (e) => {
+					const src = e.target.value
+					const run = ++pasteRun
+					resetCaches()
+					if (!src.trim()) {
+						updateStats()
+						updateTsNote()
+						$("#actions").style.display = "none"
+						$("#results").innerHTML = ""
+						return
+					}
+					await nextFrame()
+					if (run !== pasteRun) return
+
+					const ext = TS_SYNTAX_RE.test(src) ? ".ts" : ".js"
+					userFiles = new Map([[`/virtual/user/input${ext}`, src]])
+					userFileCount = 1
+					userHasImport = /@minecraft\/[\w-]+/.test(src)
+					updateStats()
+					updateTsNote()
+					$("#actions").style.display = "flex"
+					$("#results").innerHTML = ""
+				})
+
+				$("#reset").addEventListener("click", () => {
+					resetCaches()
+					$("#stats").innerHTML = ""
+					$("#tsNote").classList.add("hidden")
+					$("#actions").style.display = "none"
+					$("#results").innerHTML = ""
+					$("#paste").value = ""
+					picker.value = ""
+				})
+			}
+
+			function addSourceFile(path, source) {
+				const key = "/virtual/user/" + toUnix(path).replace(/^\/+/, "")
+				if (!SOURCE_EXT.test(key) || userFiles.has(key)) return false
+				userFiles.set(key, source)
+				userFileCount++
+				if (/@minecraft\/[\w-]+/.test(source)) userHasImport = true
+				return true
+			}
+
+			function registerManifest(manifestText, manifestPath, sourceRoot) {
+				try {
+					const manifest = JSON.parse(manifestText)
+					const modules = Array.isArray(manifest.modules)
+						? manifest.modules
+						: []
+					const scriptModule = modules.find(
+						(module) => module && module.type === "script" && module.entry
+					)
+
+					if (scriptModule) {
+						const manifestDir = manifestPath.replace(/\/[^/]*$/, "")
+						const relativeEntry = toUnix(
+							String(scriptModule.entry).replace(/^\.\//, "")
+						)
+						const entry = normalizePath(`${manifestDir}/${relativeEntry}`)
+						if (userFiles.has(entry) && !manifestEntry) manifestEntry = entry
+					}
+
+					const dependencies = Array.isArray(manifest.dependencies)
+						? manifest.dependencies
+						: []
+					for (const dependency of dependencies) {
+						const id = dependency && dependency.module_name
+						if (!id || !id.startsWith("@minecraft/")) continue
+
+						// Coerce the declared version into a concrete string.
+						// Minecraft manifests use strings ("2.4.0", "beta"),
+						// but arrays ([2,4,0]) and numbers are also legal.
+						let versionStr = null
+						const v = dependency.version
+						if (typeof v === "string") versionStr = v.trim() || null
+						else if (Array.isArray(v)) versionStr = v.join(".")
+						else if (typeof v === "number") versionStr = String(v)
+
+						const isBeta =
+							typeof versionStr === "string" && /beta/i.test(versionStr)
+
+						const existing = MODULES.find((module) => module.id === id)
+						if (existing) {
+							existing.on = true
+							if (isBeta) existing.beta = true
+							if (versionStr) existing.targetVersion = versionStr
+						} else {
+							MODULES.push({
+								id,
+								label: id.replace("@minecraft/", ""),
+								on: true,
+								beta: isBeta,
+								targetVersion: versionStr || undefined,
+							})
+						}
+					}
+				} catch {
+					/* ignore malformed manifests */
+				}
+			}
+
+			async function ingestPack(file, packPath) {
+				const zip = await ensureFflate()
+				const archive = zip.unzipSync(new Uint8Array(await file.arrayBuffer()))
+				const packName = packPath.split("/").pop() || "pack"
+				const packRoot =
+					"/virtual/user/" + packName.replace(/\.(?:mcpack|mcaddon)$/i, "")
+				const manifests = []
+
+				for (const [entryName, bytes] of Object.entries(archive)) {
+					const path = toUnix(entryName).replace(/^\/+/, "")
+					if (!path || path.endsWith("/") || SKIP_DIRS.test("/" + path))
+						continue
+
+					if (/(^|\/)manifest\.json$/i.test(path)) {
+						manifests.push({
+							path,
+							text: new TextDecoder().decode(bytes),
+						})
+						continue
+					}
+
+					if (!SOURCE_EXT.test(path)) continue
+					if (bytes.byteLength > MAX_FILE_SIZE) continue
+					addSourceFile(`${packRoot}/${path}`, new TextDecoder().decode(bytes))
+				}
+
+				for (const manifest of manifests) {
+					registerManifest(
+						manifest.text,
+						`${packRoot}/${manifest.path}`,
+						packRoot
+					)
+				}
+			}
+
+			async function ingestFiles(fileList) {
+				resetCaches()
+
+				const bar = $("#bar")
+				const barFill = bar ? bar.querySelector("i") : null
+				const setProgress = (pct) => {
+					if (barFill) barFill.style.width = pct
+				}
+				const showBar = () => {
+					if (bar) bar.classList.remove("hidden")
+				}
+				const hideBar = () => {
+					if (bar) setTimeout(() => bar.classList.add("hidden"), 400)
+				}
+
+				showBar()
+				setProgress("0%")
+
+				const manifests = []
+				for (let i = 0; i < fileList.length; i++) {
+					const { file, path } = fileList[i]
+					if (i % 20 === 0) {
+						setProgress(((i / fileList.length) * 100).toFixed(1) + "%")
+						await nextFrame()
+					}
+					if (SKIP_DIRS.test("/" + path)) continue
+
+					if (PACK_EXT.test(path)) {
+						if (file.size <= MAX_PACK_SIZE) {
+							try {
+								await ingestPack(file, path)
+							} catch (error) {
+								bundleError = `Could not read ${path}: ${error.message || error}`
+							}
+						}
+						continue
+					}
+
+					if (!SOURCE_EXT.test(path)) {
+						if (/(^|\/)manifest\.json$/i.test(path)) {
+							if (file.size <= MAX_FILE_SIZE) {
+								manifests.push({ path: toUnix(path), text: await file.text() })
+							}
+						}
+						continue
+					}
+					if (file.size > MAX_FILE_SIZE) continue
+
+					addSourceFile(path, await file.text())
+				}
+
+				for (const manifest of manifests) {
+					registerManifest(
+						manifest.text,
+						"/virtual/user/" + manifest.path,
+						"/virtual/user"
+					)
+				}
+				renderModulePicker()
+
+				setProgress("100%")
+				hideBar()
+
+				if (userFileCount > 1) {
+					try {
+						await ensureEsbuild()
+					} catch (e) {
+						bundleError = "esbuild load failed: " + (e.message || e)
+					}
+					if (!bundleError) {
+						try {
+							await bundleUserFiles()
+						} catch (e) {
+							bundleError = String(e)
+						}
+					}
+				}
+
+				updateStats()
+				updateTsNote()
+				$("#actions").style.display = userFileCount > 0 ? "flex" : "none"
+				$("#results").innerHTML = ""
+			}
+
+			const TS_SYNTAX_RE =
+				/\b(interface\s+\w+|type\s+\w+\s*=|enum\s+\w+|namespace\s+\w+|declare\s+(module|const|function|class|namespace)|implements\s+\w+|<[A-Z]\w*(\s*,\s*[A-Z]\w*)*\s*>|\bas\s+[A-Z]\w*)/
+
+			function updateStats() {
+				const el = $("#stats")
+				if (!userFileCount) {
+					el.innerHTML = ""
+					return
+				}
+				let html = `<span><b>${userFileCount}</b> file${userFileCount === 1 ? "" : "s"}</span>`
+				if (bundleResult) {
+					const kb = (bundleResult.source.length / 1024).toFixed(1)
+					const srcCount = bundleResult.map.sources.length
+					html += `<span class="chip bundle">bundled · ${srcCount} source${srcCount === 1 ? "" : "s"} · ${kb} kB</span>`
+				} else if (userFileCount > 1 && bundleError) {
+					html += `<span class="chip warn" title="${esc(bundleError)}">bundle failed</span>`
+				} else if (userFileCount > 1) {
+					html += `<span class="chip multi">multi-file</span>`
+				}
+				el.innerHTML = html
+			}
+
+			function updateTsNote() {
+				const el = $("#tsNote")
+				if (!userFileCount) {
+					el.classList.add("hidden")
+					return
+				}
+				if (!userHasImport) {
+					el.classList.remove("hidden", "bad")
+					el.classList.add("warn")
+					el.textContent =
+						"⚠  No file imports a @minecraft/* module — every version will pass trivially."
+				} else if (bundleError && userFileCount > 1) {
+					el.classList.remove("hidden", "bad")
+					el.classList.add("warn")
+					el.textContent =
+						"⚠  " + bundleError + " — falling back to per-file compile."
+				} else {
+					el.classList.add("hidden")
+				}
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §11  ANALYSIS RUN
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			function esc(s) {
+				return String(s).replace(
+					/[&<>"']/g,
+					(c) =>
+						({
+							"&": "&amp;",
+							"<": "&lt;",
+							">": "&gt;",
+							'"': "&quot;",
+							"'": "&#39;",
+						})[c]
+				)
+			}
+
+			function snippetFor(file, start, length) {
+				const src = userFiles.get(file)
+				if (!src) return null
+				const lineStart = src.lastIndexOf("\n", start - 1) + 1
+				const lineEnd = src.indexOf("\n", start + (length || 0))
+				const end = lineEnd === -1 ? src.length : lineEnd
+				const line = src.slice(lineStart, end)
+				const col = start - lineStart
+				const caretLen = Math.max(1, length || 1)
+				const trimmed = line.replace(/\t/g, "    ")
+				const pre = esc(trimmed.slice(0, col))
+				const mid = esc(trimmed.slice(col, col + caretLen))
+				const post = esc(trimmed.slice(col + caretLen))
+				return `${pre}<span class="caret">${mid || " "}</span>${post}`
+			}
+
+			async function runAnalysis() {
+				const selected = selectedModuleIds()
+				if (!userFileCount) return
+				const resultsEl = $("#results")
+
+				if (!selected.length) {
+					resultsEl.innerHTML = `<div class="note-line bad">Select at least one module above.</div>`
+					return
+				}
+
+				const run = ++currentRun
+				const btn = $("#analyze")
+				const includePre = $("#includePre").checked
+				const reverse = $("#reverseOrder").checked
+
+				btn.disabled = true
+				btn.textContent = "Loading TypeScript…"
+				resultsEl.innerHTML = ""
+
+				try {
+					await ensureTs()
+				} catch (e) {
+					btn.disabled = false
+					btn.textContent = "Find minimum versions"
+					resultsEl.innerHTML = `<div class="note-line bad">Failed to load TypeScript: ${esc(String(e))}</div>`
+					return
+				}
+				if (run !== currentRun) {
+					btn.disabled = false
+					return
+				}
+
+				btn.textContent = "Loading stdlib…"
+				await ensureLibs()
+				if (run !== currentRun) {
+					btn.disabled = false
+					return
+				}
+
+				btn.textContent = "Establishing baseline…"
+				await nextFrame()
+				try {
+					buildNoiseBaseline()
+				} catch (e) {
+					btn.disabled = false
+					btn.textContent = "Find minimum versions"
+					resultsEl.innerHTML = `<div class="note-line bad">Baseline compile failed: ${esc(String(e))}</div>`
+					return
+				}
+				if (run !== currentRun) {
+					btn.disabled = false
+					return
+				}
+
+				for (const moduleId of selected) {
+					if (run !== currentRun) {
+						btn.disabled = false
+						return
+					}
+					await sweepModule(moduleId, {
+						includePre,
+						reverse,
+						run,
+						resultsEl,
+						btn,
+					})
+				}
+
+				btn.disabled = false
+				btn.textContent = "Find minimum versions"
+			}
+
+			async function sweepModule(moduleId, ctx) {
+				const { includePre, reverse, run, resultsEl, btn } = ctx
+
+				// Target-version pre-check. When the source came from a folder
+				// with a manifest that declares a concrete version for this
+				// module, verify the code type-checks against that version
+				// BEFORE sweeping. If it doesn't, the manifest itself is
+				// broken — the sweep would be misleading, so we stop here.
+				const moduleInfo = MODULES.find((m) => m.id === moduleId)
+				const targetVersion = moduleInfo && moduleInfo.targetVersion
+				let targetOk = false
+				let targetUnavailable = false
+
+				if (targetVersion && !/beta/i.test(targetVersion)) {
+					btn.textContent = `Checking ${moduleId}@${targetVersion} (manifest target)…`
+					await nextFrame()
+					if (run !== ctx.run) return
+
+					let dts = null
+					try {
+						dts = await fetchDts(moduleId, targetVersion)
+					} catch {
+						dts = null
+					}
+					if (run !== ctx.run) return
+
+					if (dts == null) {
+						targetUnavailable = true
+					} else {
+						const check = checkVersion(moduleId, dts)
+						if (check.state !== "ok") {
+							renderTargetFailure(resultsEl, moduleId, targetVersion, check)
+							return
+						}
+						targetOk = true
+					}
+				}
+
+				btn.textContent = `Fetching ${moduleId} versions…`
+				let versions
+				try {
+					versions = await fetchVersions(moduleId)
+				} catch {
+					appendNote(resultsEl, moduleId, `Failed to fetch version list.`)
+					return
+				}
+				versions = versions.filter((v) => includePre || !v.includes("-"))
+
+				// Normal mode: oldest → newest (find the first working version).
+				// Reverse mode: newest → oldest (stop at the first broken version).
+				versions.sort(reverse ? (a, b) => cmpVer(b, a) : cmpVer)
+
+				if (!versions.length) {
+					appendNote(resultsEl, moduleId, `No published versions.`)
+					return
+				}
+				if (run !== ctx.run) return
+
+				const targetChip = targetOk
+					? `<span class="chip" style="color:var(--ok);border-color:#1f5a2a;background:#0e1a0e;font-size:9px;padding:1px 6px;margin-left:6px">target ${esc(targetVersion)} ✔</span>`
+					: targetUnavailable
+						? `<span class="chip" style="color:var(--warn);border-color:#3a2a15;background:#1f1508;font-size:9px;padding:1px 6px;margin-left:6px">target ${esc(targetVersion)} unavailable</span>`
+						: ""
+
+				const section = document.createElement("div")
+				section.className = "mod-section"
+				section.innerHTML = `
+    <div class="mod-section-header">
+      <span class="name">${esc(moduleId)}${targetChip}</span>
+      <span class="status">${versions.length} versions</span>
+    </div>
+    <div class="rows"></div>
+  `
+				resultsEl.appendChild(section)
+				const rowsEl = section.querySelector(".rows")
+
+				const rows = []
+				for (const v of versions) {
+					const row = document.createElement("div")
+					row.className = "row"
+					row.dataset.state = "pending"
+					row.dataset.version = v
+					row.innerHTML = `<div class="ver">${esc(v)}</div>
+      <div class="body"><div class="status"><span class="icon"><i class="spinner"></i></span><span class="note">checking…</span><span class="time"></span></div></div>`
+					rowsEl.appendChild(row)
+					rows.push(row)
+				}
+
+				// Pass 1: check every version (or stop early in reverse mode).
+				const rawResults = new Array(versions.length).fill(null)
+				const compiledContents = new Set()
+				// `stoppedAt` = index of the first failing version in reverse mode.
+				// Everything after it is left unchecked, and we mark the rows accordingly.
+				let stoppedAt = -1
+
+				for (let i = 0; i < versions.length; i++) {
+					if (run !== ctx.run) return
+					const v = versions[i]
+					btn.textContent = `${moduleId} · ${v} (${i + 1}/${versions.length})…`
+
+					const tStart = performance.now()
+					let result,
+						wasDup = false
+					try {
+						const dts = await fetchDts(moduleId, v)
+						if (dts == null) {
+							result = { state: "unknown", errors: null }
+						} else {
+							wasDup = compiledContents.has(dts)
+							result = checkVersion(moduleId, dts)
+							compiledContents.add(dts)
+						}
+					} catch {
+						result = { state: "unknown", errors: null }
+					}
+					const elapsed = performance.now() - tStart
+					if (run !== ctx.run) return
+
+					rawResults[i] = { result, elapsed, wasDup }
+					renderRow(rows[i], result, { elapsed, wasDup })
+					await nextFrame()
+
+					// Reverse mode: once we see a failure, every older version
+					// would also fail (or is irrelevant), so we stop the sweep
+					// to save bandwidth and compile time.
+					if (reverse && result.state === "fail") {
+						stoppedAt = i
+						break
+					}
+				}
+
+				// Mark unchecked rows (only possible in reverse mode).
+				if (stoppedAt >= 0) {
+					for (let i = stoppedAt + 1; i < versions.length; i++) {
+						rows[i].dataset.state = "unknown"
+						rows[i].querySelector(".body").innerHTML =
+							`<div class="status"><span class="icon" style="color:var(--dim2)">–</span><span class="note">skipped (older than first failure)</span></div>`
+					}
+				}
+
+				// Pass 2: errors present in every version.
+				// Only meaningful when the sweep ran to completion. In reverse
+				// mode with an early stop we don't have a full sample, so we skip it.
+				const compiledResults = rawResults.filter(
+					(r) => r && r.result.state !== "unknown"
+				)
+				let commonKeys = null
+				if (
+					stoppedAt < 0 &&
+					compiledResults.length > 0 &&
+					compiledResults.every((r) => r.result.state === "fail")
+				) {
+					for (const r of compiledResults) {
+						const keys = new Set(r.result.errors.map(errorKey))
+						if (commonKeys === null) commonKeys = keys
+						else {
+							for (const k of commonKeys) if (!keys.has(k)) commonKeys.delete(k)
+							if (commonKeys.size === 0) break
+						}
+					}
+				}
+				if (commonKeys === null) commonKeys = new Set()
+
+				const commonErrors = []
+				if (commonKeys.size > 0) {
+					for (const r of compiledResults) {
+						const seen = new Set()
+						for (const e of r.result.errors) {
+							const k = errorKey(e)
+							if (commonKeys.has(k) && !seen.has(k)) {
+								seen.add(k)
+								commonErrors.push(e)
+							}
+						}
+						if (commonErrors.length) break
+					}
+				}
+
+				// Pass 3: re-render with common errors subtracted + verdict.
+				const states = new Array(versions.length).fill("unknown")
+				for (let i = 0; i < versions.length; i++) {
+					const r = rawResults[i]
+					if (!r || r.result.state === "unknown") {
+						// Skipped rows keep the "skipped" note we wrote above.
+						if (stoppedAt >= 0 && i > stoppedAt) continue
+						states[i] = "unknown"
+						continue
+					}
+					const filtered = r.result.errors.filter(
+						(e) => !commonKeys.has(errorKey(e))
+					)
+					if (filtered.length === 0) {
+						states[i] = "ok"
+						renderRow(
+							rows[i],
+							{ state: "ok", errors: null },
+							{ elapsed: r.elapsed, wasDup: r.wasDup }
+						)
+					} else {
+						states[i] = "fail"
+						renderRow(
+							rows[i],
+							{ state: "fail", errors: filtered },
+							{ elapsed: r.elapsed, wasDup: r.wasDup }
+						)
+					}
+				}
+
+				// Find the minimum version.
+				//  - Normal mode: array is ascending → min is the FIRST ok.
+				//  - Reverse mode: array is descending → min is the LAST ok
+				//    before the first failure.
+				let minIdx = -1
+				if (reverse) {
+					for (let i = 0; i < versions.length; i++) {
+						if (states[i] === "ok") minIdx = i
+						else if (states[i] === "fail") break
+					}
+				} else {
+					minIdx = states.findIndex((s) => s === "ok")
+				}
+
+				if (minIdx >= 0) {
+					rows[minIdx].classList.add("min")
+					const badge = document.createElement("span")
+					badge.className = "badge"
+					badge.textContent = "MINIMUM"
+					rows[minIdx].querySelector(".ver").appendChild(badge)
+					section.querySelector(".status").innerHTML =
+						`<span style="color:var(--ok)">✔</span> minimum ${esc(versions[minIdx])}`
+				} else if (stoppedAt >= 0 && states[0] === "fail") {
+					// Reverse mode hit a failure on the very first (newest) version.
+					section.querySelector(".status").innerHTML =
+						`<span style="color:var(--bad)">✕</span> latest failed — untick "newest first" to sweep all`
+				} else if (states.every((s) => s === "unknown")) {
+					section.querySelector(".status").textContent = "no types available"
+				} else {
+					section.querySelector(".status").innerHTML =
+						`<span style="color:var(--bad)">✕</span> no version satisfies`
+				}
+
+				if (commonKeys.size > 0) {
+					const uniq = new Map()
+					for (const e of commonErrors) {
+						const k = `${e.file}:${e.line}:${e.code}`
+						if (!uniq.has(k)) uniq.set(k, e)
+					}
+					const list = [...uniq.values()]
+					const div = document.createElement("div")
+					div.className = "note-line warn"
+					div.style.marginTop = "10px"
+					let body =
+						`${list.length} version-independent error${list.length === 1 ? "" : "s"} ` +
+						`ignored (present in every version — likely bugs in your own code):`
+					body += `<details><summary>show</summary><ul style="margin:6px 0 0;padding-left:18px;line-height:1.7">`
+					for (const e of list.slice(0, 20)) {
+						const short = e.file.split("/").pop()
+						body += `<li>TS${e.code} · ${esc(short)}:${e.line}:${e.col} — ${esc(e.message)}</li>`
+					}
+					if (list.length > 20)
+						body += `<li>… and ${list.length - 20} more</li>`
+					body += `</ul></details>`
+					div.innerHTML = body
+					section.appendChild(div)
+				}
+			}
+
+			function appendNote(resultsEl, moduleId, msg) {
+				const div = document.createElement("div")
+				div.className = "mod-section"
+				div.innerHTML = `
+    <div class="mod-section-header">
+      <span class="name">${esc(moduleId)}</span>
+      <span class="status" style="color:var(--bad)">${esc(msg)}</span>
+    </div>`
+				resultsEl.appendChild(div)
+			}
+
+			function renderTargetFailure(resultsEl, moduleId, targetVersion, result) {
+				const section = document.createElement("div")
+				section.className = "mod-section"
+				section.innerHTML = `
+    <div class="mod-section-header">
+      <span class="name">${esc(moduleId)}</span>
+      <span class="status" style="color:var(--bad)">✕ manifest target ${esc(targetVersion)} fails — sweep skipped</span>
+    </div>
+  `
+				const row = document.createElement("div")
+				row.className = "row"
+				row.innerHTML = `<div class="ver">${esc(targetVersion)}</div><div class="body"></div>`
+				section.appendChild(row)
+				renderRow(
+					row,
+					{ state: "fail", errors: result.errors },
+					{ elapsed: null, wasDup: false }
+				)
+
+				const note = document.createElement("div")
+				note.className = "note-line warn"
+				note.style.marginTop = "10px"
+				note.textContent =
+					"The manifest declares this version, but the code has type errors against it. " +
+					"Fix the errors above (or update the manifest version), then re-run."
+				section.appendChild(note)
+
+				resultsEl.appendChild(section)
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §12  ROW RENDERING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			function renderRow(row, result, meta) {
+				row.dataset.state = result.state
+				if (meta && meta.wasDup) row.classList.add("dup")
+				else row.classList.remove("dup")
+
+				const ICON = { ok: "✔", fail: "✕", unknown: "–" }
+				const COLOR = {
+					ok: "var(--ok)",
+					fail: "var(--bad)",
+					unknown: "var(--dim2)",
+				}
+
+				let html = `<div class="status">`
+				html += `<span class="icon" style="color:${COLOR[result.state] || "var(--dim2)"}">${ICON[result.state] || ""}</span>`
+				html += `<span class="note">`
+				if (result.state === "ok") html += "type-checks cleanly"
+				else if (result.state === "unknown")
+					html += "type declarations unavailable"
+				else if (result.state === "fail") {
+					const n = result.errors.length
+					html += `${n} API error${n === 1 ? "" : "s"}`
+				}
+				html += `</span>`
+				if (meta?.wasDup) {
+					html += `<span class="cat cascade" title="same .d.ts as a previous version — result cached">reused</span>`
+				}
+				if (
+					meta?.elapsed != null &&
+					result.state !== "unknown" &&
+					!meta.wasDup
+				) {
+					html += `<span class="time">${meta.elapsed.toFixed(0)} ms</span>`
+				}
+				html += `</div>`
+
+				if (result.state === "fail" && result.errors.length) {
+					const counts = new Map()
+					for (const e of result.errors) {
+						const c = CATEGORY[e.code] || "other"
+						counts.set(c, (counts.get(c) || 0) + 1)
+					}
+					html += `<div class="cats">`
+					for (const [cat, n] of [...counts].sort((a, b) => b[1] - a[1])) {
+						html += `<span class="cat ${cat}">${cat} · ${n}</span>`
+					}
+					html += `</div>`
+
+					const byFile = new Map()
+					for (const e of result.errors) {
+						if (!byFile.has(e.file)) byFile.set(e.file, [])
+						byFile.get(e.file).push(e)
+					}
+					html += `<details><summary>show errors (${result.errors.length})</summary>`
+					let shown = 0
+					outer: for (const [file, errs] of byFile) {
+						const short = file.split("/").slice(-2).join("/")
+						html += `<div class="errgroup"><div class="filehead">${esc(short)}</div>`
+						for (const e of errs) {
+							if (shown >= 60) {
+								html += `<div class="err">…</div>`
+								break outer
+							}
+							const snippet = snippetFor(file, e.start, e.length)
+							html += `<div class="err">`
+							html += `<div class="head"><span class="code">TS${e.code}</span> <span class="pos">${e.line}:${e.col}</span> — ${esc(e.message)}</div>`
+							if (snippet) html += `<pre>${snippet}</pre>`
+							html += `</div>`
+							shown++
+						}
+						html += `</div>`
+					}
+					if (result.errors.length > shown) {
+						html += `<div class="errgroup"><div class="filehead" style="color:var(--dim2)">… and ${result.errors.length - shown} more</div></div>`
+					}
+					html += `</details>`
+				}
+				row.querySelector(".body").innerHTML = html
+			}
+
+			/* ═══════════════════════════════════════════════════════════════════════════
+   §13  BOOTSTRAP
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+			document.querySelectorAll(".tabs button").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					document
+						.querySelectorAll(".tabs button")
+						.forEach((b) => b.classList.toggle("active", b === btn))
+					$("#tab-folder").classList.toggle(
+						"hidden",
+						btn.dataset.tab !== "folder"
+					)
+					$("#tab-paste").classList.toggle(
+						"hidden",
+						btn.dataset.tab !== "paste"
+					)
+				})
+			})
+
+			$("#analyze").addEventListener("click", runAnalysis)
+
+			renderModulePicker()
+			wireModulePicker()
+			wireFileIngestion()
+
+			ensureTs().catch(() => {})
+		</script>
+	</body>
+</html>
