@@ -1,12 +1,10 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta
-			name="viewport"
-			content="width=device-width,initial-scale=1"
-		/>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<title>@minecraft/* — minimum version finder</title>
+
 		<style>
 			:root {
 				--bg: #0d1117;
@@ -20,56 +18,59 @@
 				--warn: #d29922;
 				--bad: #f85149;
 				--accent: #58a6ff;
-				--mono:
-					ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+				--mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 			}
+
 			* {
 				box-sizing: border-box;
 			}
+
 			body {
 				margin: 0;
 				background: var(--bg);
 				color: var(--text);
-				font:
-					14px/1.5 -apple-system,
-					BlinkMacSystemFont,
-					"Segoe UI",
-					Roboto,
-					sans-serif;
+				font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 			}
+
 			.wrap {
 				max-width: 920px;
 				margin: 0 auto;
 				padding: 0 16px;
 			}
+
 			header {
-				border-bottom: 1px solid var(--border);
-				padding: 18px 0 0;
 				position: sticky;
 				top: 0;
-				background: rgba(13, 17, 23, 0.94);
-				backdrop-filter: blur(8px);
 				z-index: 10;
+				padding: 18px 0 0;
+				background: rgba(13, 17, 23, 0.94);
+				border-bottom: 1px solid var(--border);
+				backdrop-filter: blur(8px);
 			}
+
 			h1 {
+				margin: 0 0 14px;
 				font-size: 14px;
 				font-weight: 600;
-				margin: 0 0 14px;
 				letter-spacing: 0.01em;
 			}
+
 			h1 b {
 				color: var(--accent);
 			}
+
 			h1 span {
 				color: var(--dim);
 				font-weight: 400;
 			}
+
 			.tabs {
 				display: flex;
 				gap: 6px;
 				margin-bottom: 12px;
 				font-size: 12px;
 			}
+
 			.tabs button {
 				padding: 6px 12px;
 				border: 1px solid var(--border);
@@ -79,190 +80,219 @@
 				cursor: pointer;
 				font: inherit;
 			}
+
 			.tabs button.active {
 				background: var(--panel);
 				color: var(--text);
 				border-color: var(--dim2);
 			}
+
 			main {
 				padding: 20px 0 80px;
 			}
+
 			.drop {
+				padding: 26px 16px;
 				border: 1.5px dashed var(--border);
 				border-radius: 10px;
-				padding: 26px 16px;
+				background: var(--panel2);
 				text-align: center;
 				cursor: pointer;
 				transition: 0.15s;
-				background: var(--panel2);
 			}
+
 			.drop:hover,
 			.drop.over {
 				border-color: var(--accent);
 				background: #111820;
 			}
+
 			.drop .big {
-				font-size: 14px;
-				color: var(--text);
 				margin-bottom: 6px;
+				color: var(--text);
+				font-size: 14px;
 			}
+
 			.drop .small {
-				font-size: 12px;
 				color: var(--dim2);
-				font-family: var(--mono);
+				font: 12px var(--mono);
 			}
+
 			.drop svg {
 				display: block;
 				margin: 0 auto 10px;
 				opacity: 0.5;
 			}
+
 			textarea {
 				width: 100%;
 				min-height: 200px;
+				padding: 12px;
 				background: var(--panel2);
 				border: 1px solid var(--border);
 				border-radius: 8px;
 				color: var(--text);
 				font: 12px/1.6 var(--mono);
-				padding: 12px;
 				outline: none;
 				resize: vertical;
 				transition: border-color 0.15s;
 			}
+
 			textarea:focus {
 				border-color: var(--accent);
 			}
+
 			.hidden {
 				display: none !important;
 			}
+
 			.stats {
 				display: flex;
 				gap: 10px;
 				flex-wrap: wrap;
 				align-items: center;
-				font: 12px/1.6 var(--mono);
 				margin: 16px 0;
 				color: var(--dim);
+				font: 12px/1.6 var(--mono);
 			}
+
 			.stats b {
 				color: var(--text);
 				font-weight: 600;
 			}
+
 			.chip {
-				font-size: 10px;
 				padding: 2px 8px;
-				border-radius: 10px;
-				font-family: var(--mono);
 				border: 1px solid var(--border);
+				border-radius: 10px;
 				background: var(--panel);
 				color: var(--dim2);
+				font: 10px var(--mono);
 			}
+
 			.chip.bundle {
-				color: #79c0ff;
 				border-color: #1f3a56;
 				background: #0e1a2a;
+				color: #79c0ff;
 			}
+
 			.chip.multi {
-				color: #ffa657;
 				border-color: #3a2a15;
 				background: #1f1508;
+				color: #ffa657;
 			}
+
 			.chip.warn {
-				color: #f85149;
 				border-color: #5a1f1f;
 				background: #2a0a0a;
+				color: #f85149;
 			}
+
 			.actions {
 				display: flex;
 				gap: 8px;
-				margin-top: 16px;
 				flex-wrap: wrap;
 				align-items: center;
+				margin-top: 16px;
 			}
+
 			button.action {
+				padding: 10px 18px;
 				background: #238636;
 				border: 1px solid #2ea043;
-				color: #fff;
 				border-radius: 8px;
-				padding: 10px 18px;
+				color: #fff;
 				font-size: 13px;
 				font-weight: 600;
 				cursor: pointer;
 				transition: 0.15s;
 			}
+
 			button.action:hover:not(:disabled) {
 				background: #2ea043;
 			}
+
 			button.action:disabled {
 				opacity: 0.5;
 				cursor: not-allowed;
 			}
+
 			button.ghost {
+				padding: 10px 16px;
 				background: var(--panel);
 				border: 1px solid var(--border);
-				color: var(--text);
 				border-radius: 8px;
-				padding: 10px 16px;
+				color: var(--text);
 				font-size: 13px;
 				cursor: pointer;
 			}
+
 			button.ghost:hover {
 				border-color: var(--dim2);
 			}
+
 			label.chk {
 				display: flex;
-				align-items: center;
 				gap: 6px;
-				font-size: 12px;
+				align-items: center;
 				color: var(--dim);
-				font-family: var(--mono);
+				font: 12px var(--mono);
 				cursor: pointer;
 			}
+
 			input[type="checkbox"] {
 				accent-color: var(--accent);
 			}
+
 			.modules {
+				margin-top: 0;
+				padding: 12px 14px;
 				background: var(--panel);
 				border: 1px solid var(--border);
 				border-radius: 10px;
-				padding: 12px 14px;
-				margin-top: 12px;
 			}
+
 			.modules-head {
-				font: 11px/1.6 var(--mono);
+				margin-bottom: 8px;
 				color: var(--dim2);
+				font: 11px/1.6 var(--mono);
 				letter-spacing: 0.05em;
 				text-transform: uppercase;
-				margin-bottom: 8px;
 			}
+
 			.modules-list {
 				display: grid;
 				grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 				gap: 6px;
 			}
+
 			.mod {
 				display: flex;
-				align-items: center;
 				gap: 8px;
-				font: 12px/1.6 var(--mono);
-				color: var(--text);
+				align-items: center;
 				padding: 5px 8px;
+				background: var(--panel2);
 				border: 1px solid var(--border);
 				border-radius: 6px;
-				background: var(--panel2);
+				color: var(--text);
+				font: 12px/1.6 var(--mono);
 				cursor: pointer;
 				transition: 0.15s;
 			}
+
 			.mod:hover {
 				border-color: var(--dim2);
 			}
+
 			.mod.on {
-				border-color: var(--accent);
 				background: #0e1a2a;
+				border-color: var(--accent);
 			}
+
 			.mod input {
 				flex: none;
 			}
+
 			.mod .id {
 				flex: 1;
 				min-width: 0;
@@ -270,237 +300,278 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
+
 			.mod .rm {
-				color: var(--dim2);
-				cursor: pointer;
 				padding: 0 4px;
+				color: var(--dim2);
 				font-size: 14px;
 				line-height: 1;
+				cursor: pointer;
 			}
+
 			.mod .rm:hover {
 				color: var(--bad);
 			}
+
 			.modules-add {
 				display: flex;
 				gap: 6px;
 				margin-top: 8px;
 			}
+
 			.modules-add input {
 				flex: 1;
+				padding: 6px 10px;
 				background: var(--panel2);
 				border: 1px solid var(--border);
 				border-radius: 6px;
 				color: var(--text);
 				font: 12px var(--mono);
-				padding: 6px 10px;
 				outline: none;
 			}
+
 			.modules-add input:focus {
 				border-color: var(--accent);
 			}
+
 			.modules-add button {
+				padding: 0 12px;
 				background: var(--panel2);
 				border: 1px solid var(--border);
-				color: var(--text);
 				border-radius: 6px;
-				padding: 0 12px;
+				color: var(--text);
 				font-size: 13px;
 				cursor: pointer;
 			}
+
 			.modules-add button:hover {
 				border-color: var(--dim2);
 			}
+
 			.mod-section {
 				margin-top: 24px;
 			}
+
 			.mod-section-header {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+				margin-bottom: 12px;
 				padding: 8px 0;
 				border-bottom: 1px solid var(--border);
-				margin-bottom: 12px;
 				font: 12px/1.6 var(--mono);
 			}
+
 			.mod-section-header .name {
 				color: var(--accent);
 				font-weight: 600;
 			}
+
 			.mod-section-header .status {
 				color: var(--dim2);
 			}
+
 			.row {
-				border: 1px solid var(--border);
-				border-left: 3px solid var(--border);
-				border-radius: 7px;
-				background: var(--panel);
-				margin-bottom: 6px;
-				padding: 9px 12px;
 				display: grid;
 				grid-template-columns: 130px 1fr;
 				gap: 12px;
 				align-items: start;
-				transition:
-					opacity 0.15s,
-					border-color 0.15s;
+				margin-bottom: 6px;
+				padding: 9px 12px;
+				background: var(--panel);
+				border: 1px solid var(--border);
+				border-left: 3px solid var(--border);
+				border-radius: 7px;
+				transition: opacity 0.15s, border-color 0.15s;
 			}
+
 			.row[data-state="ok"] {
 				border-left-color: var(--ok);
 			}
+
 			.row[data-state="fail"] {
 				border-left-color: var(--bad);
 				opacity: 0.85;
 			}
+
 			.row[data-state="unknown"] {
 				border-left-color: var(--dim2);
 				opacity: 0.55;
 			}
+
 			.row[data-state="pending"] {
 				border-left-color: var(--dim2);
 				opacity: 0.4;
 			}
+
 			.row.min {
 				background: #0d1a10;
 				box-shadow: 0 0 0 1px #2ea043 inset;
 			}
+
 			.row.dup {
 				opacity: 0.55;
 			}
+
 			.ver {
-				font: 12px/1.6 var(--mono);
-				color: var(--dim);
 				display: flex;
-				align-items: center;
 				gap: 6px;
 				flex-wrap: wrap;
+				align-items: center;
+				color: var(--dim);
+				font: 12px/1.6 var(--mono);
 			}
+
 			.badge {
-				font-size: 9px;
 				padding: 2px 6px;
-				border-radius: 4px;
 				background: #2ea043;
+				border-radius: 4px;
 				color: #fff;
+				font-size: 9px;
 				font-weight: 700;
 				letter-spacing: 0.05em;
 			}
+
 			.body {
 				min-width: 0;
 				font: 12px/1.6 var(--mono);
 			}
+
 			.status {
 				display: flex;
 				gap: 8px;
-				align-items: baseline;
 				flex-wrap: wrap;
+				align-items: baseline;
 			}
+
 			.status .icon {
 				flex: none;
 			}
+
 			.status .note {
-				color: var(--dim);
 				min-width: 0;
 				overflow-wrap: anywhere;
+				color: var(--dim);
 			}
+
 			.status .time {
+				margin-left: auto;
 				color: var(--dim2);
 				font-size: 11px;
-				margin-left: auto;
 				white-space: nowrap;
 			}
+
 			.row[data-state="ok"] .status .note {
 				color: #7ee787;
 			}
+
 			.row[data-state="fail"] .status .note {
 				color: #ff7b72;
 			}
+
 			.cats {
 				display: flex;
 				gap: 6px;
 				flex-wrap: wrap;
 				margin-top: 4px;
 			}
+
 			.cat {
-				font-size: 10px;
 				padding: 1px 6px;
-				border-radius: 3px;
 				background: #21262d;
+				border-radius: 3px;
 				color: var(--dim);
-				font-family: var(--mono);
+				font: 10px var(--mono);
 			}
+
 			.cat.member {
-				color: #ffa657;
 				background: #2a1c0e;
+				color: #ffa657;
 			}
+
 			.cat.signature {
-				color: #ff9bce;
 				background: #2a0f1f;
+				color: #ff9bce;
 			}
+
 			.cat.export {
-				color: #79c0ff;
 				background: #0f1c2a;
+				color: #79c0ff;
 			}
+
 			.cat.cascade {
 				color: var(--dim2);
 			}
+
 			details {
 				margin-top: 6px;
 			}
+
 			details summary {
-				cursor: pointer;
-				font: 11px/1.6 var(--mono);
 				color: var(--dim2);
+				font: 11px/1.6 var(--mono);
+				cursor: pointer;
 				list-style: none;
 				user-select: none;
 			}
+
 			details summary::-webkit-details-marker {
 				display: none;
 			}
+
 			details summary:hover {
 				color: var(--accent);
 			}
+
 			.errgroup {
 				margin-top: 8px;
-				border-top: 1px solid #21262d;
 				padding-top: 8px;
+				border-top: 1px solid #21262d;
 			}
+
 			.errgroup:first-child {
-				border-top: none;
 				padding-top: 0;
+				border-top: none;
 			}
+
 			.errgroup .filehead {
-				font: 11px/1.6 var(--mono);
-				color: #a5d6ff;
 				margin-bottom: 4px;
+				color: #a5d6ff;
+				font: 11px/1.6 var(--mono);
 			}
+
 			.err {
 				margin: 4px 0;
 				font: 11px/1.5 var(--mono);
 			}
+
 			.err .head {
 				color: #ff7b72;
 			}
-			.err .head .code {
-				color: var(--dim2);
-			}
+
+			.err .head .code,
 			.err .head .pos {
 				color: var(--dim2);
 			}
+
 			.err pre {
-				margin: 2px 0 0 0;
+				margin: 2px 0 0;
 				padding: 3px 8px;
 				background: #0d1117;
-				border-radius: 4px;
 				border-left: 2px solid #30363d;
-				font: 11px/1.5 var(--mono);
+				border-radius: 4px;
 				color: #c9d1d9;
+				font: 11px/1.5 var(--mono);
 				overflow-x: auto;
-				white-space: pre;
 				overflow-y: hidden;
+				white-space: pre;
 			}
+
 			.err pre .caret {
 				color: #f85149;
 				font-weight: 700;
 			}
+
 			.spinner {
 				display: inline-block;
 				width: 9px;
@@ -510,38 +581,45 @@
 				border-radius: 50%;
 				animation: spin 0.7s linear infinite;
 			}
+
 			@keyframes spin {
 				to {
 					transform: rotate(360deg);
 				}
 			}
+
 			.bar {
 				height: 3px;
+				margin-top: 14px;
 				background: #21262d;
 				border-radius: 2px;
 				overflow: hidden;
-				margin-top: 14px;
 			}
+
 			.bar i {
 				display: block;
+				width: 0;
 				height: 100%;
 				background: var(--accent);
-				width: 0;
 				transition: width 0.2s;
 			}
+
 			.note-line {
-				font: 12px/1.6 var(--mono);
-				color: var(--dim2);
 				margin: 10px 0;
+				color: var(--dim2);
+				font: 12px/1.6 var(--mono);
 			}
+
 			.note-line.warn {
 				color: #e3b341;
 			}
+
 			.note-line.bad {
 				color: #f85149;
 			}
 		</style>
 	</head>
+
 	<body>
 		<header>
 			<div class="wrap">
@@ -549,13 +627,9 @@
 					<b>@minecraft/*</b>
 					<span>· minimum version finder · tsc + esbuild</span>
 				</h1>
+
 				<div class="tabs">
-					<button
-						data-tab="folder"
-						class="active"
-					>
-						Scan project
-					</button>
+					<button data-tab="folder" class="active">Scan project</button>
 					<button data-tab="paste">Paste code</button>
 				</div>
 			</div>
@@ -565,31 +639,22 @@
 			<div class="wrap">
 				<div class="modules">
 					<div class="modules-head">Modules to check</div>
-					<div
-						class="modules-list"
-						id="modulesList"
-					></div>
+
+					<div class="modules-list" id="modulesList"></div>
+
 					<div class="modules-add">
 						<input
 							id="customModule"
 							placeholder="e.g. @minecraft/server-admin"
 							spellcheck="false"
-						/>
-						<button
-							id="addCustom"
-							title="Add module"
 						>
-							+
-						</button>
+
+						<button id="addCustom" title="Add module">+</button>
 					</div>
 				</div>
 
 				<div id="tab-folder">
-					<div
-						class="drop"
-						id="drop"
-						style="margin-top: 16px"
-					>
+					<div class="drop" id="drop" style="margin-top: 16px">
 						<svg
 							width="32"
 							height="32"
@@ -600,19 +665,17 @@
 							stroke-linecap="round"
 							stroke-linejoin="round"
 						>
-							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-							<polyline points="17 8 12 3 7 8" />
-							<line
-								x1="12"
-								y1="3"
-								x2="12"
-								y2="15"
-							/>
+							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+							<polyline points="17 8 12 3 7 8"/>
+							<line x1="12" y1="3" x2="12" y2="15"/>
 						</svg>
+
 						<div class="big">Drop your project folder here</div>
+
 						<div class="small">
 							or click to browse · .js .ts folders · .mcpack · .mcaddon
 						</div>
+
 						<input
 							type="file"
 							accept=".js,.ts,.mcpack,.mcaddon"
@@ -620,15 +683,11 @@
 							webkitdirectory
 							multiple
 							class="hidden"
-						/>
+						>
 					</div>
 				</div>
 
-				<div
-					id="tab-paste"
-					class="hidden"
-					style="margin-top: 16px"
-				>
+				<div id="tab-paste" class="hidden" style="margin-top: 16px">
 					<textarea
 						id="paste"
 						placeholder="// Paste code that imports from a @minecraft/* module
@@ -641,66 +700,37 @@ world.afterEvents.playerSpawn.subscribe(ev => {
 					></textarea>
 				</div>
 
-				<div
-					class="stats"
-					id="stats"
-				></div>
-				<div
-					class="note-line hidden"
-					id="tsNote"
-				></div>
-				<div
-					class="bar hidden"
-					id="bar"
-				>
+				<div class="stats" id="stats"></div>
+
+				<div class="note-line hidden" id="tsNote"></div>
+
+				<div class="bar hidden" id="bar">
 					<i></i>
 				</div>
 
-				<div
-					class="actions"
-					id="actions"
-					style="display: none"
-				>
-					<button
-						class="action"
-						id="analyze"
-					>
+				<div class="actions" id="actions" style="display: none">
+					<button class="action" id="analyze">
 						Find minimum versions
 					</button>
-					<button
-						class="ghost"
-						id="reset"
-					>
-						Reset
-					</button>
+
+					<button class="ghost" id="reset">Reset</button>
+
 					<label class="chk">
-						<input
-							type="checkbox"
-							id="includePre"
-						/>
+						<input type="checkbox" id="includePre">
 						include beta / prerelease
 					</label>
+
 					<label class="chk">
-						<input
-							type="checkbox"
-							id="reverseOrder"
-						/>
+						<input type="checkbox" id="reverseOrder">
 						newest first (stop on first error)
 					</label>
 				</div>
 
-				<div
-					id="results"
-					style="margin-top: 16px"
-				></div>
+				<div id="results" style="margin-top: 16px"></div>
 			</div>
 		</main>
 
 		<script type="module">
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §1  CONFIG
-   ═══════════════════════════════════════════════════════════════════════════ */
-
 			const TS_VERSION = "5.4.5"
 			const ESBUILD_VERSION = "0.21.5"
 
@@ -709,25 +739,23 @@ world.afterEvents.playerSpawn.subscribe(ev => {
 			const ESBUILD_WASM_URL = `https://cdn.jsdelivr.net/npm/esbuild-wasm@${ESBUILD_VERSION}/esbuild.wasm`
 			const FFLATE_MODULE_URL = "https://esm.sh/fflate@0.8.2"
 			const TS_LIB_BASE = `https://cdn.jsdelivr.net/npm/typescript@${TS_VERSION}/lib`
-			const CDN = `https://cdn.jsdelivr.net/npm`
+			const CDN = "https://cdn.jsdelivr.net/npm"
 
 			const DEFAULT_LIB = "lib.es2020.d.ts"
 
-			const SKIP_DIRS =
-				/(^|\/)(node_modules|\.git|dist|build|out|\.next|\.cache|coverage|\.vscode)(\/|$)/
+			const SKIP_DIRS = /(^|\/)(node_modules|\.git|dist|build|out|\.next|\.cache|coverage|\.vscode)(\/|$)/
 			const SOURCE_EXT = /\.(?:d\.ts|js|ts)$/i
 			const PACK_EXT = /\.(?:mcpack|mcaddon)$/i
 			const MAX_FILE_SIZE = 5 * 1024 * 1024
 			const MAX_PACK_SIZE = 25 * 1024 * 1024
 
-			/** TypeScript diagnostic codes that plausibly indicate an API mismatch. */
 			const API_ERROR_CODES = new Set([
-				2305, 2304, 2339, 2551, 2503, 2724, 2769, 2345, 2554, 2353, 2571, 18046,
-				18048, 2576, 2739, 2741, 2614, 2335, 2362, 2363, 2365,
+				2305, 2304, 2339, 2551, 2503, 2724, 2769, 2345,
+				2554, 2353, 2571, 18046, 18048, 2576, 2739,
+				2741, 2614, 2335, 2362, 2363, 2365
 			])
 
-			/** Human-readable category labels for diagnostic codes. */
-			const CATEGORY = {
+			const ERROR_CATEGORY = {
 				2305: "export",
 				2306: "export",
 				2304: "name",
@@ -749,56 +777,18 @@ world.afterEvents.playerSpawn.subscribe(ev => {
 				2335: "operator",
 				2362: "operator",
 				2363: "operator",
-				2365: "operator",
+				2365: "operator"
 			}
 
-			/** Ambient globals the Minecraft script runtime provides. */
 			const GLOBAL_STUB = `
 declare var console: {
-  log(...args: any[]): void;
-  warn(...args: any[]): void;
-  error(...args: any[]): void;
-  info(...args: any[]): void;
-  debug(...args: any[]): void;
-  trace(...args: any[]): void;
-  time(label?: string): void;
-  timeEnd(label?: string): void;
-  assert(cond: any, ...args: any[]): void;
-  table(data: any): void;
+	log(...args: any[]): void;
+	warn(...args: any[]): void;
+	error(...args: any[]): void;
+	info(...args: any[]): void;
 };
-declare function setTimeout(cb: (...args: any[]) => void, ms?: number, ...args: any[]): number;
-declare function clearTimeout(id?: number): void;
-declare function setInterval(cb: (...args: any[]) => void, ms?: number, ...args: any[]): number;
-declare function clearInterval(id?: number): void;
-declare function queueMicrotask(cb: () => void): void;
 declare var globalThis: any;
 `
-
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §2  PATH UTILITIES
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-			function toUnix(p) {
-				return String(p).replace(/\\/g, "/")
-			}
-
-			function normalizePath(p) {
-				const parts = toUnix(p).split("/")
-				const out = []
-				for (const part of parts) {
-					if (part === "" || part === ".") continue
-					if (part === "..") {
-						if (out.length) out.pop()
-						continue
-					}
-					out.push(part)
-				}
-				return "/" + out.join("/")
-			}
-
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §3  MODULE REGISTRY
-   ═══════════════════════════════════════════════════════════════════════════ */
 
 			const DEFAULT_MODULES = [
 				{ id: "@minecraft/server", label: "Server", on: true },
@@ -809,233 +799,377 @@ declare var globalThis: any;
 				{
 					id: "@minecraft/debug-utilities",
 					label: "Debug Utilities",
-					on: false,
+					on: false
 				},
 				{ id: "@minecraft/server-admin", label: "Server Admin", on: false },
-				{ id: "@minecraft/server-editor", label: "Server Editor", on: false },
+				{ id: "@minecraft/server-editor", label: "Server Editor", on: false }
 			]
 
-			let MODULES = DEFAULT_MODULES.map((m) => ({ ...m }))
+			const TS_SYNTAX_RE =
+				/\b(interface\s+\w+|type\s+\w+\s*=|enum\s+\w+|namespace\s+\w+|declare\s+(module|const|function|class|namespace)|implements\s+\w+|<[A-Z]\w*(\s*,\s*[A-Z]\w*)*\s*>|\bas\s+[A-Z]\w*)/
 
-			function selectedModuleIds() {
-				return getSelectedModules()
-			}
-			function allModuleIds() {
-				return MODULES.map((m) => m.id)
-			}
+			const B64 =
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
-			function buildModuleStub(moduleIds) {
-				return moduleIds.map((id) => `declare module '${id}';`).join("\n")
-			}
+			const $ = selector => document.querySelector(selector)
+			const nextFrame = () => new Promise(resolve => setTimeout(resolve, 0))
 
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §4  ASSET LOADERS
-   ═══════════════════════════════════════════════════════════════════════════ */
+			let MODULES = DEFAULT_MODULES.map(module => ({ ...module }))
 
 			let ts = null
 			let esbuild = null
 			let esbuildInitError = null
 			let fflate = null
 
-			const libCache = new Map()
-			let libsLoading = null
+			let userFiles = new Map()
+			let userFileCount = 0
+			let userHasImport = false
+			let manifestEntry = null
 
+			let bundleResult = null
+			let bundleError = null
+			let lastProgram = null
+			let noiseKeys = null
+
+			let libsLoading = null
+			let currentRun = 0
+			let pasteRun = 0
+
+			const libCache = new Map()
 			const versionsCache = new Map()
 			const dtsCache = new Map()
+			const verdictCache = new Map()
+
+			function toUnix(path) {
+				return String(path).replace(/\\/g, "/")
+			}
+
+			function normalizePath(path) {
+				const parts = toUnix(path).split("/")
+				const result = []
+
+				for (const part of parts) {
+					if (!part || part === ".") continue
+
+					if (part === "..") {
+						if (result.length) result.pop()
+						continue
+					}
+
+					result.push(part)
+				}
+
+				return "/" + result.join("/")
+			}
+
+			function normalizeSourcePath(path) {
+				if (!path) return path
+
+				path = toUnix(path)
+
+				if (path.startsWith("/virtual/")) return path
+				if (path.startsWith("/")) return "/virtual/user" + path
+
+				while (path.startsWith("../")) {
+					path = path.slice(3)
+				}
+
+				path = path.replace(/^\.\//, "")
+				return "/virtual/user/" + path
+			}
+
+			function escapeHtml(value) {
+				return String(value).replace(
+					/[&<>"']/g,
+					char => ({
+						"&": "&amp;",
+						"<": "&lt;",
+						">": "&gt;",
+						'"': "&quot;",
+						"'": "&#39;"
+					})[char]
+				)
+			}
+
+			function getSelectedModules() {
+				return MODULES
+					.filter(module => module.on)
+					.map(module => module.id)
+			}
+
+			function getAllModuleIds() {
+				return MODULES.map(module => module.id)
+			}
+
+			function buildModuleStub(moduleIds) {
+				return moduleIds
+					.map(id => `declare module '${id}';`)
+					.join("\n")
+			}
 
 			async function ensureTs() {
 				if (ts) return ts
-				const mod = await import(/* @vite-ignore */ TS_MODULE_URL)
-				ts = mod.default || mod
+
+				const module = await import(/* @vite-ignore */ TS_MODULE_URL)
+				ts = module.default || module
 				return ts
 			}
 
 			async function ensureFflate() {
 				if (fflate) return fflate
-				const mod = await import(/* @vite-ignore */ FFLATE_MODULE_URL)
-				fflate = mod.default || mod
+
+				const module = await import(/* @vite-ignore */ FFLATE_MODULE_URL)
+				fflate = module.default || module
 				return fflate
 			}
 
 			async function ensureEsbuild() {
 				if (esbuild) return esbuild
 				if (esbuildInitError) throw new Error(esbuildInitError)
+
 				try {
-					const mod = await import(/* @vite-ignore */ ESBUILD_MODULE_URL)
-					const api = mod.default || mod
-					await api.initialize({ wasmURL: ESBUILD_WASM_URL })
+					const module = await import(/* @vite-ignore */ ESBUILD_MODULE_URL)
+					const api = module.default || module
+
+					await api.initialize({
+						wasmURL: ESBUILD_WASM_URL
+					})
+
 					esbuild = api
 					return esbuild
-				} catch (e) {
-					esbuildInitError = e.message || String(e)
-					throw e
+				} catch (error) {
+					esbuildInitError = error.message || String(error)
+					throw error
 				}
 			}
 
 			async function ensureLibs() {
 				if (libsLoading) return libsLoading
+
 				libsLoading = (async () => {
 					const seen = new Set()
-					const stack = [DEFAULT_LIB]
-					while (stack.length) {
-						const name = stack.pop()
+					const pending = [DEFAULT_LIB]
+
+					while (pending.length) {
+						const name = pending.pop()
+
 						if (seen.has(name)) continue
 						seen.add(name)
-						let text = null
+
+						let source = null
+
 						try {
-							const res = await fetch(`${TS_LIB_BASE}/${name}`)
-							if (res.ok) text = (await res.text()).replace(/^\uFEFF/, "")
+							const response = await fetch(`${TS_LIB_BASE}/${name}`)
+
+							if (response.ok) {
+								source = (await response.text()).replace(/^\uFEFF/, "")
+							}
 						} catch {
-							/* miss */
+							// Ignore missing standard library files.
 						}
-						libCache.set(name, text)
-						if (text) {
-							const re = /\/\/\/\s*<reference\s+lib=["']([^"']+)["']/g
-							let m
-							while ((m = re.exec(text))) stack.push("lib." + m[1] + ".d.ts")
+
+						libCache.set(name, source)
+
+						if (!source) continue
+
+						const references =
+							/\/\/\/\s*<reference\s+lib=["']([^"']+)["']/g
+
+						let match
+
+						while ((match = references.exec(source))) {
+							pending.push(`lib.${match[1]}.d.ts`)
 						}
 					}
+
 					return libCache
 				})()
+
 				return libsLoading
 			}
 
 			async function fetchVersions(moduleId) {
-				if (versionsCache.has(moduleId)) return versionsCache.get(moduleId)
-				const res = await fetch(
+				if (versionsCache.has(moduleId)) {
+					return versionsCache.get(moduleId)
+				}
+
+				const response = await fetch(
 					`https://data.jsdelivr.com/v1/packages/npm/${moduleId}`
 				)
-				const data = await res.json()
-				const versions = (data.versions || []).map((v) => v.version)
+
+				const data = await response.json()
+				const versions = (data.versions || []).map(version => version.version)
+
 				versionsCache.set(moduleId, versions)
 				return versions.reverse()
 			}
 
 			async function fetchDts(moduleId, version) {
 				const key = `${moduleId}@${version}`
-				if (dtsCache.has(key)) return dtsCache.get(key)
-				let text = null
+
+				if (dtsCache.has(key)) {
+					return dtsCache.get(key)
+				}
+
+				let source = null
+
 				try {
-					const res = await fetch(`${CDN}/${moduleId}@${version}/index.d.ts`)
-					if (res.ok) {
-						text = (await res.text()).replace(/^\uFEFF/, "")
-						if (!text.trim()) text = null
+					const response = await fetch(
+						`${CDN}/${moduleId}@${version}/index.d.ts`
+					)
+
+					if (response.ok) {
+						source = (await response.text()).replace(/^\uFEFF/, "")
+
+						if (!source.trim()) {
+							source = null
+						}
 					}
 				} catch {
-					/* miss */
+					// Ignore unavailable type declarations.
 				}
-				dtsCache.set(key, text)
-				return text
+
+				dtsCache.set(key, source)
+				return source
 			}
 
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §5  SOURCE MAP (VLQ decoding)
-   ═══════════════════════════════════════════════════════════════════════════ */
+			function decodeVLQ(value) {
+				const result = []
+				let index = 0
 
-			const B64 =
-				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+				while (index < value.length) {
+					let number = 0
+					let shift = 0
+					let continued
 
-			function decodeVLQ(str) {
-				const out = []
-				let i = 0
-				while (i < str.length) {
-					let result = 0,
-						shift = 0,
-						cont
 					do {
-						const c = B64.indexOf(str[i++])
-						if (c < 0) return out
-						cont = c & 32
-						result += (c & 31) << shift
+						const char = B64.indexOf(value[index++])
+
+						if (char < 0) return result
+
+						continued = char & 32
+						number += (char & 31) << shift
 						shift += 5
-					} while (cont)
-					const neg = result & 1
-					result >>>= 1
-					out.push(neg ? -result : result)
+					} while (continued)
+
+					const negative = number & 1
+					number >>>= 1
+
+					result.push(negative ? -number : number)
 				}
-				return out
+
+				return result
 			}
 
 			function parseSourceMap(map) {
 				const lines = (map.mappings || "").split(";")
-				const out = []
-				let srcIdx = 0,
-					srcLine = 0,
-					srcCol = 0
-				for (const rawLine of lines) {
-					if (!rawLine) {
-						out.push([])
+				const decoded = []
+
+				let sourceIndex = 0
+				let sourceLine = 0
+				let sourceColumn = 0
+
+				for (const line of lines) {
+					if (!line) {
+						decoded.push([])
 						continue
 					}
-					const segs = []
-					let genCol = 0
-					for (const rawSeg of rawLine.split(",")) {
-						if (!rawSeg) continue
-						const vals = decodeVLQ(rawSeg)
-						if (!vals.length) continue
-						genCol += vals[0]
-						if (vals.length >= 4) {
-							srcIdx += vals[1]
-							srcLine += vals[2]
-							srcCol += vals[3]
-							segs.push({ genCol, srcIdx, srcLine, srcCol })
+
+					const segments = []
+					let generatedColumn = 0
+
+					for (const segment of line.split(",")) {
+						if (!segment) continue
+
+						const values = decodeVLQ(segment)
+
+						if (!values.length) continue
+
+						generatedColumn += values[0]
+
+						if (values.length >= 4) {
+							sourceIndex += values[1]
+							sourceLine += values[2]
+							sourceColumn += values[3]
+
+							segments.push({
+								genCol: generatedColumn,
+								srcIdx: sourceIndex,
+								srcLine: sourceLine,
+								srcCol: sourceColumn
+							})
 						} else {
-							segs.push({ genCol })
+							segments.push({
+								genCol: generatedColumn
+							})
 						}
 					}
-					out.push(segs)
+
+					decoded.push(segments)
 				}
-				return out
+
+				return decoded
 			}
-
-			function normalizeSourcePath(s) {
-				if (!s) return s
-				s = toUnix(s)
-				if (s.startsWith("/virtual/")) return s
-				if (s.startsWith("/")) return "/virtual/user" + s
-				while (s.startsWith("../")) s = s.slice(3)
-				s = s.replace(/^\.\//, "")
-				return "/virtual/user/" + s
-			}
-
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §6  BUNDLER
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-			let bundleResult = null
-			let bundleError = null
 
 			function pickEntry() {
-				if (manifestEntry && userFiles.has(manifestEntry)) return manifestEntry
+				if (manifestEntry && userFiles.has(manifestEntry)) {
+					return manifestEntry
+				}
 
-				const imported = new Set()
-				const importRe =
+				const importedFiles = new Set()
+
+				const importRegex =
 					/(?:import|export)\s+(?:[^'"]*?\s+from\s+)?['"](\.[^'"]+)['"]/g
-				const reqRe = /\brequire\s*\(\s*['"](\.[^'"]+)['"]\s*\)/g
-				for (const [file, src] of userFiles) {
-					const dir = file.replace(/\/[^/]+$/, "")
-					for (const re of [importRe, reqRe]) {
-						re.lastIndex = 0
-						let m
-						while ((m = re.exec(src))) {
-							const base = normalizePath(dir + "/" + m[1])
-							const cands = [base]
-							for (const e of [".ts", ".js"]) cands.push(base + e)
-							for (const e of [".ts", ".js"]) cands.push(base + "/index" + e)
-							for (const c of cands)
-								if (userFiles.has(c)) {
-									imported.add(c)
+
+				const requireRegex =
+					/\brequire\s*\(\s*['"](\.[^'"]+)['"]\s*\)/g
+
+				for (const [file, source] of userFiles) {
+					const directory = file.replace(/\/[^/]+$/, "")
+
+					for (const regex of [importRegex, requireRegex]) {
+						regex.lastIndex = 0
+
+						let match
+
+						while ((match = regex.exec(source))) {
+							const base = normalizePath(
+								directory + "/" + match[1]
+							)
+
+							const candidates = [base]
+
+							for (const extension of [".ts", ".js"]) {
+								candidates.push(base + extension)
+							}
+
+							for (const extension of [".ts", ".js"]) {
+								candidates.push(base + "/index" + extension)
+							}
+
+							for (const candidate of candidates) {
+								if (userFiles.has(candidate)) {
+									importedFiles.add(candidate)
 									break
 								}
+							}
 						}
 					}
 				}
-				const roots = [...userFiles.keys()].filter((f) => !imported.has(f))
-				if (!roots.length) return [...userFiles.keys()][0] || null
+
+				const roots = [...userFiles.keys()]
+					.filter(file => !importedFiles.has(file))
+
+				if (!roots.length) {
+					return [...userFiles.keys()][0] || null
+				}
+
 				roots.sort(
 					(a, b) =>
-						(userFiles.get(b)?.length || 0) - (userFiles.get(a)?.length || 0)
+						(userFiles.get(b)?.length || 0) -
+						(userFiles.get(a)?.length || 0)
 				)
+
 				return roots[0]
 			}
 
@@ -1044,35 +1178,50 @@ declare var globalThis: any;
 				bundleError = null
 
 				if (!userFileCount) return
+
 				const entry = pickEntry()
+
 				if (!entry) {
 					bundleError = "No entry file found"
 					return
 				}
 
 				let api
+
 				try {
 					api = await ensureEsbuild()
-				} catch (e) {
-					bundleError = "esbuild load failed: " + (e.message || e)
+				} catch (error) {
+					bundleError = "esbuild load failed: " + (error.message || error)
 					return
 				}
 
 				const files = userFiles
-				const entryKey = entry
+				const entryFile = entry
 
-				const vfsPlugin = {
+				const virtualFileSystem = {
 					name: "vfs",
+
 					setup(build) {
-						build.onResolve({ filter: /.*/ }, (args) => {
-							const spec = args.path
+						build.onResolve({ filter: /.*/ }, args => {
+							const specifier = args.path
 
-							if (files.has(spec)) return { path: spec, namespace: "vfs" }
+							if (files.has(specifier)) {
+								return {
+									path: specifier,
+									namespace: "vfs"
+								}
+							}
 
-							if (spec.startsWith("@minecraft/"))
-								return { path: spec, external: true }
-							if (spec.startsWith("node:"))
-								return { path: spec, external: true }
+							if (
+								specifier.startsWith("@minecraft/") ||
+								specifier.startsWith("node:")
+							) {
+								return {
+									path: specifier,
+									external: true
+								}
+							}
+
 							if (
 								[
 									"fs",
@@ -1081,58 +1230,114 @@ declare var globalThis: any;
 									"crypto",
 									"util",
 									"events",
-									"stream",
-								].includes(spec)
+									"stream"
+								].includes(specifier)
 							) {
-								return { path: spec, external: true }
+								return {
+									path: specifier,
+									external: true
+								}
 							}
 
-							if (spec.startsWith(".") || spec.startsWith("/")) {
-								const containing = args.importer || entryKey
-								const dir = containing.replace(/\/[^/]+$/, "")
-								const base = spec.startsWith("/")
-									? normalizePath(spec)
-									: normalizePath(dir + "/" + spec)
-								const cands = [base]
-								for (const e of [
+							if (
+								specifier.startsWith(".") ||
+								specifier.startsWith("/")
+							) {
+								const importer = args.importer || entryFile
+								const directory = importer.replace(/\/[^/]+$/, "")
+
+								const base = specifier.startsWith("/")
+									? normalizePath(specifier)
+									: normalizePath(directory + "/" + specifier)
+
+								const candidates = [base]
+
+								for (const extension of [
 									".ts",
 									".tsx",
 									".js",
 									".jsx",
 									".mjs",
 									".cjs",
-									".d.ts",
-								])
-									cands.push(base + e)
-								for (const e of [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"])
-									cands.push(base + "/index" + e)
-								for (const c of cands)
-									if (files.has(c)) return { path: c, namespace: "vfs" }
+									".d.ts"
+								]) {
+									candidates.push(base + extension)
+								}
+
+								for (const extension of [
+									".ts",
+									".tsx",
+									".js",
+									".jsx",
+									".mjs",
+									".cjs"
+								]) {
+									candidates.push(base + "/index" + extension)
+								}
+
+								for (const candidate of candidates) {
+									if (files.has(candidate)) {
+										return {
+											path: candidate,
+											namespace: "vfs"
+										}
+									}
+								}
+
 								return {
 									errors: [
-										{ text: `Cannot resolve '${spec}' from ${containing}` },
-									],
+										{
+											text: `Cannot resolve '${specifier}' from ${importer}`
+										}
+									]
 								}
 							}
 
-							return { path: spec, external: true }
+							return {
+								path: specifier,
+								external: true
+							}
 						})
 
-						build.onLoad({ filter: /.*/, namespace: "vfs" }, (args) => {
-							const source = files.get(args.path)
-							if (source == null)
-								return { errors: [{ text: `No source for ${args.path}` }] }
-							const ext = (args.path.split(".").pop() || "").toLowerCase()
-							const loader = ext === "ts" ? "ts" : ext === "tsx" ? "tsx" : "js"
-							return { contents: source, loader }
-						})
-					},
+						build.onLoad(
+							{ filter: /.*/, namespace: "vfs" },
+							args => {
+								const source = files.get(args.path)
+
+								if (source == null) {
+									return {
+										errors: [
+											{
+												text: `No source for ${args.path}`
+											}
+										]
+									}
+								}
+
+								const extension =
+									args.path.split(".").pop()?.toLowerCase() || ""
+
+								const loader =
+									extension === "ts"
+										? "ts"
+										: extension === "tsx"
+											? "tsx"
+											: "js"
+
+								return {
+									contents: source,
+									loader
+								}
+							}
+						)
+					}
 				}
 
 				let result
+
 				try {
 					result = await api.build({
-						entryPoints: [entryKey],
+						entryPoints: [entryFile],
 						bundle: true,
 						write: false,
 						format: "esm",
@@ -1140,155 +1345,239 @@ declare var globalThis: any;
 						sourcemap: "inline",
 						sourcesContent: true,
 						logLevel: "silent",
-						plugins: [vfsPlugin],
+						plugins: [virtualFileSystem]
 					})
-				} catch (e) {
-					const detail = e?.errors?.length
-						? e.errors.map((x) => x.text || JSON.stringify(x)).join("; ")
-						: e.message || String(e)
+				} catch (error) {
+					const detail = error?.errors?.length
+						? error.errors
+							.map(item => item.text || JSON.stringify(item))
+							.join("; ")
+						: error.message || String(error)
+
 					bundleError = "Bundle failed: " + detail
 					return
 				}
 
-				if (!result.outputFiles || !result.outputFiles.length) {
+				if (!result.outputFiles?.length) {
 					bundleError = "esbuild produced no output"
 					return
 				}
 
-				const code = result.outputFiles[0].text
-				const smMatch =
+				const source = result.outputFiles[0].text
+
+				const sourceMapMatch =
 					/\/\/# sourceMappingURL=data:application\/json[^,]*,([A-Za-z0-9+/=]+)/.exec(
-						code
+						source
 					)
-				if (!smMatch) {
+
+				if (!sourceMapMatch) {
 					bundleError = "Bundle has no inline sourcemap"
 					return
 				}
 
 				let map
+
 				try {
-					map = JSON.parse(atob(smMatch[1]))
-				} catch (e) {
-					bundleError = "Sourcemap parse failed: " + e
+					map = JSON.parse(atob(sourceMapMatch[1]))
+				} catch (error) {
+					bundleError = "Sourcemap parse failed: " + error
 					return
 				}
 
 				bundleResult = {
-					source: code,
+					source,
 					map,
 					decoded: parseSourceMap(map),
-					entry: entryKey,
+					entry: entryFile
 				}
 			}
 
-			function remapPosition(genLine, genCol) {
+			function remapPosition(line, column) {
 				if (!bundleResult) return null
-				const lineSegs = bundleResult.decoded[genLine]
-				if (!lineSegs || !lineSegs.length) return null
+
+				const segments = bundleResult.decoded[line]
+
+				if (!segments?.length) return null
+
 				let best = null
-				for (const s of lineSegs) {
-					if (s.genCol <= genCol) best = s
-					else break
+
+				for (const segment of segments) {
+					if (segment.genCol <= column) {
+						best = segment
+					} else {
+						break
+					}
 				}
+
 				if (!best || best.srcIdx == null) return null
-				const src = bundleResult.map.sources[best.srcIdx]
+
 				return {
-					file: normalizeSourcePath(src),
+					file: normalizeSourcePath(
+						bundleResult.map.sources[best.srcIdx]
+					),
 					line: best.srcLine + 1,
-					col: best.srcCol + 1,
+					col: best.srcCol + 1
 				}
 			}
 
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §7  COMPILER
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-			let lastProgram = null
-
-			function compileWithTypes(realModule, typesContent) {
+			function compileWithTypes(moduleId, typeDefinitions) {
 				const typesPath = "/virtual/__types__/index.d.ts"
 				const globalsPath = "/virtual/__types__/globals.d.ts"
-				const otherPath = "/virtual/__types__/other.d.ts"
+				const otherTypesPath = "/virtual/__types__/other.d.ts"
 				const bundlePath = "/virtual/__bundle__/input.ts"
 
 				const files = new Map()
 				const userPaths = new Set()
+
 				if (bundleResult) {
 					files.set(bundlePath, bundleResult.source)
 					userPaths.add(bundlePath)
 				} else {
-					for (const [k, v] of userFiles) {
-						files.set(k, v)
-						userPaths.add(k)
+					for (const [path, source] of userFiles) {
+						files.set(path, source)
+						userPaths.add(path)
 					}
 				}
-				files.set(typesPath, typesContent)
+
+				files.set(typesPath, typeDefinitions)
 				files.set(globalsPath, GLOBAL_STUB)
 
-				const stubbed = allModuleIds().filter((id) => id !== realModule)
-				files.set(otherPath, buildModuleStub(stubbed))
+				const stubbedModules = getAllModuleIds()
+					.filter(id => id !== moduleId)
 
-				const resolveModule = (name, containing) => {
-					if (name === realModule) {
+				files.set(
+					otherTypesPath,
+					buildModuleStub(stubbedModules)
+				)
+
+				const resolveModule = (name, containingFile) => {
+					if (name === moduleId) {
 						return {
 							resolvedFileName: typesPath,
 							extension: ts.Extension.Dts,
-							isExternalLibraryImport: true,
+							isExternalLibraryImport: true
 						}
 					}
+
 					if (name.startsWith("@minecraft/")) {
 						return {
-							resolvedFileName: otherPath,
+							resolvedFileName: otherTypesPath,
 							extension: ts.Extension.Dts,
-							isExternalLibraryImport: true,
+							isExternalLibraryImport: true
 						}
 					}
+
 					if (name.startsWith(".") || name.startsWith("/")) {
-						const dir = toUnix(containing).replace(/\/[^/]+$/, "")
-						const base = normalizePath(dir + "/" + name)
-						const exts = [".ts", ".tsx", ".d.ts", ".js", ".jsx", ".mjs", ".cjs"]
-						const tries = [base]
-						for (const e of exts) tries.push(base + e)
-						for (const e of exts) tries.push(base + "/index" + e)
-						for (const t of tries)
-							if (files.has(t)) {
-								return { resolvedFileName: t, extension: ts.Extension.Ts }
+						const directory = toUnix(containingFile)
+							.replace(/\/[^/]+$/, "")
+
+						const base = normalizePath(
+							directory + "/" + name
+						)
+
+						const extensions = [
+							".ts",
+							".tsx",
+							".d.ts",
+							".js",
+							".jsx",
+							".mjs",
+							".cjs"
+						]
+
+						const candidates = [base]
+
+						for (const extension of extensions) {
+							candidates.push(base + extension)
+						}
+
+						for (const extension of extensions) {
+							candidates.push(base + "/index" + extension)
+						}
+
+						for (const candidate of candidates) {
+							if (files.has(candidate)) {
+								return {
+									resolvedFileName: candidate,
+									extension: ts.Extension.Ts
+								}
 							}
+						}
 					}
+
 					return undefined
 				}
 
 				const host = {
-					getSourceFile(fileName, langVersion) {
-						const n = toUnix(fileName)
-						if (files.has(n))
-							return ts.createSourceFile(n, files.get(n), langVersion, true)
-						const lib = libCache.get(n.split("/").pop())
-						if (lib) return ts.createSourceFile(n, lib, langVersion, true)
+					getSourceFile(fileName, languageVersion) {
+						const normalized = toUnix(fileName)
+
+						if (files.has(normalized)) {
+							return ts.createSourceFile(
+								normalized,
+								files.get(normalized),
+								languageVersion,
+								true
+							)
+						}
+
+						const lib = libCache.get(
+							normalized.split("/").pop()
+						)
+
+						if (lib) {
+							return ts.createSourceFile(
+								normalized,
+								lib,
+								languageVersion,
+								true
+							)
+						}
+
 						return undefined
 					},
+
 					getDefaultLibFileName: () => DEFAULT_LIB,
 					writeFile: () => {},
 					getCurrentDirectory: () => "/",
-					getCanonicalFileName: (f) => f,
+					getCanonicalFileName: file => file,
 					useCaseSensitiveFileNames: () => true,
 					getNewLine: () => "\n",
-					fileExists: (f) => {
-						const n = toUnix(f)
-						if (files.has(n)) return true
-						const lib = libCache.get(n.split("/").pop())
+
+					fileExists(fileName) {
+						const normalized = toUnix(fileName)
+
+						if (files.has(normalized)) return true
+
+						const lib = libCache.get(
+							normalized.split("/").pop()
+						)
+
 						return lib != null
 					},
-					readFile: (f) => {
-						const n = toUnix(f)
-						if (files.has(n)) return files.get(n)
-						const lib = libCache.get(n.split("/").pop())
+
+					readFile(fileName) {
+						const normalized = toUnix(fileName)
+
+						if (files.has(normalized)) {
+							return files.get(normalized)
+						}
+
+						const lib = libCache.get(
+							normalized.split("/").pop()
+						)
+
 						return lib == null ? undefined : lib
 					},
+
 					directoryExists: () => true,
 					getDirectories: () => [],
-					resolveModuleNames: (names, containing) =>
-						names.map((n) => resolveModule(n, containing)),
+
+					resolveModuleNames(names, containingFile) {
+						return names.map(name =>
+							resolveModule(name, containingFile)
+						)
+					}
 				}
 
 				const options = {
@@ -1305,236 +1594,573 @@ declare var globalThis: any;
 					types: [],
 					noErrorTruncation: true,
 					esModuleInterop: true,
-					allowSyntheticDefaultImports: true,
+					allowSyntheticDefaultImports: true
 				}
 
-				const rootNames = [...userPaths, globalsPath, otherPath]
 				const program = ts.createProgram({
-					rootNames,
+					rootNames: [...userPaths, globalsPath, otherTypesPath],
 					options,
 					host,
-					oldProgram: lastProgram || undefined,
+					oldProgram: lastProgram || undefined
 				})
+
 				lastProgram = program
 
-				const out = []
-				const inBundleMode = !!bundleResult
-				for (const d of program.getSemanticDiagnostics()) {
-					if (d.category !== ts.DiagnosticCategory.Error) continue
-					if (!d.file) continue
-					const fn = toUnix(d.file.fileName)
-					if (!userPaths.has(fn)) continue
-					if (!API_ERROR_CODES.has(d.code)) continue
+				const errors = []
+				const bundled = !!bundleResult
 
-					let line = 0,
-						col = 0,
-						fileOut = fn,
-						startOut = d.start || 0,
-						lenOut = d.length || 0
+				for (const diagnostic of program.getSemanticDiagnostics()) {
+					if (diagnostic.category !== ts.DiagnosticCategory.Error) continue
+					if (!diagnostic.file) continue
 
-					if (inBundleMode && bundleResult) {
+					const fileName = toUnix(diagnostic.file.fileName)
+
+					if (!userPaths.has(fileName)) continue
+					if (!API_ERROR_CODES.has(diagnostic.code)) continue
+
+					let line = 0
+					let column = 0
+					let outputFile = fileName
+					let start = diagnostic.start || 0
+					let length = diagnostic.length || 0
+
+					if (bundled && bundleResult) {
 						try {
-							const pos = d.file.getLineAndCharacterOfPosition(d.start || 0)
-							const remapped = remapPosition(pos.line, pos.character)
-							if (remapped) {
-								fileOut = remapped.file
-								line = remapped.line
-								col = remapped.col
-								const origSrc = userFiles.get(fileOut)
-								if (origSrc) {
-									let ln = 1,
-										idx = 0
-									while (ln < line && idx < origSrc.length) {
-										const nl = origSrc.indexOf("\n", idx)
-										if (nl === -1) break
-										idx = nl + 1
-										ln++
+							const position =
+								diagnostic.file.getLineAndCharacterOfPosition(
+									diagnostic.start || 0
+								)
+
+							const mapped = remapPosition(
+								position.line,
+								position.character
+							)
+
+							if (mapped) {
+								outputFile = mapped.file
+								line = mapped.line
+								column = mapped.col
+
+								const source = userFiles.get(outputFile)
+
+								if (source) {
+									let sourceLine = 1
+									let index = 0
+
+									while (
+										sourceLine < line &&
+										index < source.length
+									) {
+										const newline =
+											source.indexOf("\n", index)
+
+										if (newline === -1) break
+
+										index = newline + 1
+										sourceLine++
 									}
-									startOut = idx + Math.max(0, col - 1)
-									lenOut = Math.max(1, d.length || 1)
+
+									start =
+										index +
+										Math.max(0, column - 1)
+
+									length = Math.max(
+										1,
+										diagnostic.length || 1
+									)
 								}
 							}
 						} catch {
-							/* fall back */
+							// Keep the generated location if source mapping fails.
 						}
 					} else {
 						try {
-							const pos = d.file.getLineAndCharacterOfPosition(d.start || 0)
-							line = pos.line + 1
-							col = pos.character + 1
+							const position =
+								diagnostic.file.getLineAndCharacterOfPosition(
+									diagnostic.start || 0
+								)
+
+							line = position.line + 1
+							column = position.character + 1
 						} catch {
-							/* ignore */
+							// Location is optional for rendering.
 						}
 					}
 
-					out.push({
-						file: fileOut,
-						start: startOut,
-						length: lenOut,
-						code: d.code,
-						message: ts.flattenDiagnosticMessageText(d.messageText, " "),
+					errors.push({
+						file: outputFile,
+						start,
+						length,
+						code: diagnostic.code,
+						message: ts.flattenDiagnosticMessageText(
+							diagnostic.messageText,
+							" "
+						),
 						line,
-						col,
+						col: column
 					})
 				}
-				return out
+
+				return errors
 			}
 
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §8  ANALYSIS ENGINE
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-			let noiseKeys = null
-			const verdictByContent = new Map()
-			const errorKey = (e) => `${e.file}:${e.start}:${e.code}`
+			function errorKey(error) {
+				return `${error.file}:${error.start}:${error.code}`
+			}
 
 			function buildNoiseBaseline() {
 				if (noiseKeys) return noiseKeys
+
 				if (!userHasImport) {
 					noiseKeys = new Set()
 					return noiseKeys
 				}
-				const noise = compileWithTypes("__no_module__", "")
-				noiseKeys = new Set(noise.map(errorKey))
+
+				const errors = compileWithTypes("__no_module__", "")
+
+				noiseKeys = new Set(errors.map(errorKey))
 				return noiseKeys
 			}
 
-			function checkVersion(moduleId, dtsContent) {
-				const cacheKey = `${moduleId}@${dtsContent.length}:${dtsContent.slice(0, 64)}`
-				if (verdictByContent.has(cacheKey))
-					return verdictByContent.get(cacheKey)
-				const all = compileWithTypes(moduleId, dtsContent)
-				const errors = all.filter((e) => !noiseKeys.has(errorKey(e)))
-				const result = { state: errors.length ? "fail" : "ok", errors }
-				verdictByContent.set(cacheKey, result)
+			function checkVersion(moduleId, types) {
+				const cacheKey =
+					`${moduleId}@${types.length}:${types.slice(0, 64)}`
+
+				if (verdictCache.has(cacheKey)) {
+					return verdictCache.get(cacheKey)
+				}
+
+				const errors = compileWithTypes(moduleId, types)
+					.filter(error => !noiseKeys.has(errorKey(error)))
+
+				const result = {
+					state: errors.length ? "fail" : "ok",
+					errors
+				}
+
+				verdictCache.set(cacheKey, result)
 				return result
 			}
 
-			function cmpVer(a, b) {
-				const [am, ap] = a.split("-", 2)
-				const [bm, bp] = b.split("-", 2)
-				const pa = am.split(".").map(Number)
-				const pb = bm.split(".").map(Number)
-				for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-					const x = pa[i] || 0,
-						y = pb[i] || 0
-					if (x !== y) return x - y
+			function compareVersions(a, b) {
+				const [aMain, aPre] = a.split("-", 2)
+				const [bMain, bPre] = b.split("-", 2)
+
+				const aParts = aMain.split(".").map(Number)
+				const bParts = bMain.split(".").map(Number)
+
+				for (
+					let i = 0;
+					i < Math.max(aParts.length, bParts.length);
+					i++
+				) {
+					const left = aParts[i] || 0
+					const right = bParts[i] || 0
+
+					if (left !== right) {
+						return left - right
+					}
 				}
-				if (ap && !bp) return -1
-				if (!ap && bp) return 1
-				if (ap && bp) return ap < bp ? -1 : ap > bp ? 1 : 0
+
+				if (aPre && !bPre) return -1
+				if (!aPre && bPre) return 1
+
+				if (aPre && bPre) {
+					return aPre < bPre ? -1 : aPre > bPre ? 1 : 0
+				}
+
 				return 0
-			}
-
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §9  MODULE PICKER UI
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-			const $ = (sel) => document.querySelector(sel)
-			const nextFrame = () => new Promise((resolve) => setTimeout(resolve, 0))
-
-			function getSelectedModules() {
-				return MODULES.filter((module) => module.on).map((module) => module.id)
 			}
 
 			function renderModulePicker() {
 				const list = $("#modulesList")
 				list.innerHTML = ""
-				for (const m of MODULES) {
-					const el = document.createElement("label")
-					el.className = "mod" + (m.on ? " on" : "")
-					const removable = !DEFAULT_MODULES.some((d) => d.id === m.id)
-					el.innerHTML = `
-      <input type="checkbox" ${m.on ? "checked" : ""}>
-      <span class="id" title="${esc(m.id)}">${esc(m.id)}</span>
-      ${m.beta ? '<span class="chip multi" style="font-size:9px;padding:1px 6px">beta</span>' : ""}
-      ${removable ? '<span class="rm" title="Remove">×</span>' : ""}
-    `
-					const cb = el.querySelector("input")
-					cb.addEventListener("change", () => {
-						m.on = cb.checked
-						el.classList.toggle("on", m.on)
+
+				for (const module of MODULES) {
+					const element = document.createElement("label")
+
+					element.className =
+						"mod" + (module.on ? " on" : "")
+
+					const removable =
+						!DEFAULT_MODULES.some(
+							item => item.id === module.id
+						)
+
+					element.innerHTML = `
+						<input type="checkbox" ${module.on ? "checked" : ""}>
+						<span class="id" title="${escapeHtml(module.id)}">${escapeHtml(module.id)}</span>
+						${module.beta ? '<span class="chip multi" style="font-size:9px;padding:1px 6px">beta</span>' : ""}
+						${removable ? '<span class="rm" title="Remove">×</span>' : ""}
+					`
+
+					const checkbox = element.querySelector("input")
+
+					checkbox.addEventListener("change", () => {
+						module.on = checkbox.checked
+						element.classList.toggle("on", module.on)
 					})
-					const rm = el.querySelector(".rm")
-					if (rm)
-						rm.addEventListener("click", (e) => {
-							e.preventDefault()
-							e.stopPropagation()
-							MODULES = MODULES.filter((x) => x.id !== m.id)
+
+					const removeButton = element.querySelector(".rm")
+
+					if (removeButton) {
+						removeButton.addEventListener("click", event => {
+							event.preventDefault()
+							event.stopPropagation()
+
+							MODULES = MODULES.filter(
+								item => item.id !== module.id
+							)
+
 							renderModulePicker()
 						})
-					list.appendChild(el)
+					}
+
+					list.appendChild(element)
 				}
 			}
 
 			function wireModulePicker() {
 				const input = $("#customModule")
-				const btn = $("#addCustom")
-				const add = () => {
+				const button = $("#addCustom")
+
+				const addModule = () => {
 					const id = input.value.trim()
+
 					if (!id) return
+
 					if (!/^@minecraft\/[\w-]+$/.test(id)) {
 						input.value = ""
-						const prev = input.placeholder
-						input.placeholder = "must start with @minecraft/"
+
+						const previousPlaceholder = input.placeholder
+
+						input.placeholder =
+							"must start with @minecraft/"
+
 						setTimeout(() => {
-							input.placeholder = prev
+							input.placeholder = previousPlaceholder
 						}, 1800)
+
 						return
 					}
-					if (MODULES.some((m) => m.id === id)) {
+
+					if (MODULES.some(module => module.id === id)) {
 						input.value = ""
 						return
 					}
-					MODULES.push({ id, label: id, on: true })
+
+					MODULES.push({
+						id,
+						label: id,
+						on: true
+					})
+
 					input.value = ""
 					renderModulePicker()
 				}
-				btn.addEventListener("click", add)
-				input.addEventListener("keydown", (e) => {
-					if (e.key === "Enter") add()
+
+				button.addEventListener("click", addModule)
+
+				input.addEventListener("keydown", event => {
+					if (event.key === "Enter") {
+						addModule()
+					}
 				})
 			}
-
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §10  FILE INGESTION
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-			let userFiles = new Map()
-			let userFileCount = 0
-			let userHasImport = false
-			let manifestEntry = null
-			let currentRun = 0
-			let pasteRun = 0
 
 			function resetCaches() {
 				userFiles = new Map()
 				userFileCount = 0
 				userHasImport = false
 				manifestEntry = null
+
 				bundleResult = null
 				bundleError = null
 				lastProgram = null
 				noiseKeys = null
-				verdictByContent.clear()
-				for (const m of MODULES) delete m.targetVersion
+
+				verdictCache.clear()
+
+				for (const module of MODULES) {
+					delete module.targetVersion
+				}
 			}
 
-			async function walkDirectoryEntry(entry, path, out) {
+			async function walkDirectoryEntry(entry, path, output) {
 				if (entry.isFile) {
-					const f = await new Promise((res, rej) => entry.file(res, rej))
-					out.push({ file: f, path: path + entry.name })
-				} else if (entry.isDirectory) {
-					const rd = entry.createReader()
-					while (true) {
-						const batch = await new Promise((res, rej) =>
-							rd.readEntries(res, rej)
+					const file = await new Promise((resolve, reject) =>
+						entry.file(resolve, reject)
+					)
+
+					output.push({
+						file,
+						path: path + entry.name
+					})
+
+					return
+				}
+
+				if (!entry.isDirectory) return
+
+				const reader = entry.createReader()
+
+				while (true) {
+					const entries = await new Promise((resolve, reject) =>
+						reader.readEntries(resolve, reject)
+					)
+
+					if (!entries.length) break
+
+					for (const child of entries) {
+						await walkDirectoryEntry(
+							child,
+							path + entry.name + "/",
+							output
 						)
-						if (!batch.length) break
-						for (const en of batch)
-							await walkDirectoryEntry(en, path + entry.name + "/", out)
 					}
 				}
+			}
+
+			function addSourceFile(path, source) {
+				const key =
+					"/virtual/user/" +
+					toUnix(path).replace(/^\/+/, "")
+
+				if (!SOURCE_EXT.test(key) || userFiles.has(key)) {
+					return false
+				}
+
+				userFiles.set(key, source)
+				userFileCount++
+
+				if (/@minecraft\/[\w-]+/.test(source)) {
+					userHasImport = true
+				}
+
+				return true
+			}
+
+			function registerManifest(manifestText, manifestPath) {
+				try {
+					const manifest = JSON.parse(manifestText)
+
+					const modules = Array.isArray(manifest.modules)
+						? manifest.modules
+						: []
+
+					const scriptModule = modules.find(
+						module =>
+							module &&
+							module.type === "script" &&
+							module.entry
+					)
+
+					if (scriptModule) {
+						const manifestDirectory =
+							manifestPath.replace(/\/[^/]*$/, "")
+
+						const relativeEntry = toUnix(
+							String(scriptModule.entry)
+								.replace(/^\.\//, "")
+						)
+
+						const entry = normalizePath(
+							`${manifestDirectory}/${relativeEntry}`
+						)
+
+						if (userFiles.has(entry) && !manifestEntry) {
+							manifestEntry = entry
+						}
+					}
+
+					const dependencies = Array.isArray(
+						manifest.dependencies
+					)
+						? manifest.dependencies
+						: []
+
+					for (const dependency of dependencies) {
+						const id = dependency?.module_name
+
+						if (
+							!id ||
+							!id.startsWith("@minecraft/")
+						) {
+							continue
+						}
+
+						let version = null
+						const declaredVersion = dependency.version
+
+						if (typeof declaredVersion === "string") {
+							version =
+								declaredVersion.trim() || null
+						} else if (Array.isArray(declaredVersion)) {
+							version = declaredVersion.join(".")
+						} else if (
+							typeof declaredVersion === "number"
+						) {
+							version = String(declaredVersion)
+						}
+
+						const isBeta =
+							typeof version === "string" &&
+							/beta/i.test(version)
+
+						const existing = MODULES.find(
+							module => module.id === id
+						)
+
+						if (existing) {
+							existing.on = true
+
+							if (isBeta) {
+								existing.beta = true
+							}
+
+							if (version) {
+								existing.targetVersion = version
+							}
+
+							continue
+						}
+
+						MODULES.push({
+							id,
+							label: id.replace("@minecraft/", ""),
+							on: true,
+							beta: isBeta,
+							targetVersion: version || undefined
+						})
+					}
+				} catch {
+					// Ignore malformed manifests.
+				}
+			}
+
+			async function ingestPack(file, packPath) {
+				const zip = await ensureFflate()
+
+				const archive = zip.unzipSync(
+					new Uint8Array(await file.arrayBuffer())
+				)
+
+				const packName =
+					packPath.split("/").pop() || "pack"
+
+				const packRoot =
+					"/virtual/user/" +
+					packName.replace(
+						/\.(?:mcpack|mcaddon)$/i,
+						""
+					)
+
+				const manifests = []
+
+				for (const [entryName, bytes] of Object.entries(
+					archive
+				)) {
+					const path = toUnix(entryName).replace(/^\/+/, "")
+
+					if (
+						!path ||
+						path.endsWith("/") ||
+						SKIP_DIRS.test("/" + path)
+					) {
+						continue
+					}
+
+					if (/(^|\/)manifest\.json$/i.test(path)) {
+						manifests.push({
+							path,
+							text: new TextDecoder().decode(bytes)
+						})
+
+						continue
+					}
+
+					if (!SOURCE_EXT.test(path)) continue
+					if (bytes.byteLength > MAX_FILE_SIZE) continue
+
+					addSourceFile(
+						`${packRoot}/${path}`,
+						new TextDecoder().decode(bytes)
+					)
+				}
+
+				for (const manifest of manifests) {
+					registerManifest(
+						manifest.text,
+						`${packRoot}/${manifest.path}`
+					)
+				}
+			}
+
+			function updateStats() {
+				const element = $("#stats")
+
+				if (!userFileCount) {
+					element.innerHTML = ""
+					return
+				}
+
+				let html =
+					`<span><b>${userFileCount}</b> ` +
+					`file${userFileCount === 1 ? "" : "s"}</span>`
+
+				if (bundleResult) {
+					const size =
+						(bundleResult.source.length / 1024).toFixed(1)
+
+					const sourceCount =
+						bundleResult.map.sources.length
+
+					html +=
+						`<span class="chip bundle">bundled · ` +
+						`${sourceCount} source${sourceCount === 1 ? "" : "s"} · ` +
+						`${size} kB</span>`
+				} else if (userFileCount > 1 && bundleError) {
+					html +=
+						`<span class="chip warn" title="${escapeHtml(bundleError)}">` +
+						`bundle failed</span>`
+				} else if (userFileCount > 1) {
+					html += `<span class="chip multi">multi-file</span>`
+				}
+
+				element.innerHTML = html
+			}
+
+			function updateTsNote() {
+				const element = $("#tsNote")
+
+				if (!userFileCount) {
+					element.classList.add("hidden")
+					return
+				}
+
+				if (!userHasImport) {
+					element.classList.remove("hidden", "bad")
+					element.classList.add("warn")
+
+					element.textContent =
+						"⚠  No file imports a @minecraft/* module — every version will pass trivially."
+
+					return
+				}
+
+				if (bundleError && userFileCount > 1) {
+					element.classList.remove("hidden", "bad")
+					element.classList.add("warn")
+
+					element.textContent =
+						"⚠  " +
+						bundleError +
+						" — falling back to per-file compile."
+
+					return
+				}
+
+				element.classList.add("hidden")
 			}
 
 			function wireFileIngestion() {
@@ -1542,61 +2168,96 @@ declare var globalThis: any;
 				const picker = $("#picker")
 
 				drop.addEventListener("click", () => picker.click())
-				picker.addEventListener("change", () =>
+
+				picker.addEventListener("change", () => {
 					ingestFiles(
-						[...picker.files].map((f) => ({
-							file: f,
-							path: f.webkitRelativePath || f.name,
+						[...picker.files].map(file => ({
+							file,
+							path:
+								file.webkitRelativePath ||
+								file.name
 						}))
 					)
-				)
-				;["dragenter", "dragover"].forEach((ev) =>
-					drop.addEventListener(ev, (e) => {
-						e.preventDefault()
-						drop.classList.add("over")
-					})
-				)
-				;["dragleave", "drop"].forEach((ev) =>
-					drop.addEventListener(ev, (e) => {
-						e.preventDefault()
-						drop.classList.remove("over")
-					})
-				)
-				drop.addEventListener("drop", async (e) => {
-					const out = []
-					for (const item of [...e.dataTransfer.items]) {
-						const entry = item.webkitGetAsEntry?.()
-						if (entry) await walkDirectoryEntry(entry, "", out)
-					}
-					if (out.length) ingestFiles(out)
 				})
 
-				$("#paste").addEventListener("input", async (e) => {
-					const src = e.target.value
+				for (const eventName of ["dragenter", "dragover"]) {
+					drop.addEventListener(eventName, event => {
+						event.preventDefault()
+						drop.classList.add("over")
+					})
+				}
+
+				for (const eventName of ["dragleave", "drop"]) {
+					drop.addEventListener(eventName, event => {
+						event.preventDefault()
+						drop.classList.remove("over")
+					})
+				}
+
+				drop.addEventListener("drop", async event => {
+					const files = []
+
+					for (const item of [...event.dataTransfer.items]) {
+						const entry = item.webkitGetAsEntry?.()
+
+						if (entry) {
+							await walkDirectoryEntry(
+								entry,
+								"",
+								files
+							)
+						}
+					}
+
+					if (files.length) {
+						ingestFiles(files)
+					}
+				})
+
+				$("#paste").addEventListener("input", async event => {
+					const source = event.target.value
 					const run = ++pasteRun
+
 					resetCaches()
-					if (!src.trim()) {
+
+					if (!source.trim()) {
 						updateStats()
 						updateTsNote()
+
 						$("#actions").style.display = "none"
 						$("#results").innerHTML = ""
+
 						return
 					}
+
 					await nextFrame()
+
 					if (run !== pasteRun) return
 
-					const ext = TS_SYNTAX_RE.test(src) ? ".ts" : ".js"
-					userFiles = new Map([[`/virtual/user/input${ext}`, src]])
+					const extension =
+						TS_SYNTAX_RE.test(source) ? ".ts" : ".js"
+
+					userFiles = new Map([
+						[
+							`/virtual/user/input${extension}`,
+							source
+						]
+					])
+
 					userFileCount = 1
-					userHasImport = /@minecraft\/[\w-]+/.test(src)
+					userHasImport =
+						/@minecraft\/[\w-]+/.test(source)
+
 					updateStats()
 					updateTsNote()
+
 					$("#actions").style.display = "flex"
 					$("#results").innerHTML = ""
 				})
 
 				$("#reset").addEventListener("click", () => {
 					resetCaches()
+
 					$("#stats").innerHTML = ""
 					$("#tsNote").classList.add("hidden")
 					$("#actions").style.display = "none"
@@ -1606,133 +2267,48 @@ declare var globalThis: any;
 				})
 			}
 
-			function addSourceFile(path, source) {
-				const key = "/virtual/user/" + toUnix(path).replace(/^\/+/, "")
-				if (!SOURCE_EXT.test(key) || userFiles.has(key)) return false
-				userFiles.set(key, source)
-				userFileCount++
-				if (/@minecraft\/[\w-]+/.test(source)) userHasImport = true
-				return true
-			}
-
-			function registerManifest(manifestText, manifestPath, sourceRoot) {
-				try {
-					const manifest = JSON.parse(manifestText)
-					const modules = Array.isArray(manifest.modules)
-						? manifest.modules
-						: []
-					const scriptModule = modules.find(
-						(module) => module && module.type === "script" && module.entry
-					)
-
-					if (scriptModule) {
-						const manifestDir = manifestPath.replace(/\/[^/]*$/, "")
-						const relativeEntry = toUnix(
-							String(scriptModule.entry).replace(/^\.\//, "")
-						)
-						const entry = normalizePath(`${manifestDir}/${relativeEntry}`)
-						if (userFiles.has(entry) && !manifestEntry) manifestEntry = entry
-					}
-
-					const dependencies = Array.isArray(manifest.dependencies)
-						? manifest.dependencies
-						: []
-					for (const dependency of dependencies) {
-						const id = dependency && dependency.module_name
-						if (!id || !id.startsWith("@minecraft/")) continue
-
-						// Coerce the declared version into a concrete string.
-						// Minecraft manifests use strings ("2.4.0", "beta"),
-						// but arrays ([2,4,0]) and numbers are also legal.
-						let versionStr = null
-						const v = dependency.version
-						if (typeof v === "string") versionStr = v.trim() || null
-						else if (Array.isArray(v)) versionStr = v.join(".")
-						else if (typeof v === "number") versionStr = String(v)
-
-						const isBeta =
-							typeof versionStr === "string" && /beta/i.test(versionStr)
-
-						const existing = MODULES.find((module) => module.id === id)
-						if (existing) {
-							existing.on = true
-							if (isBeta) existing.beta = true
-							if (versionStr) existing.targetVersion = versionStr
-						} else {
-							MODULES.push({
-								id,
-								label: id.replace("@minecraft/", ""),
-								on: true,
-								beta: isBeta,
-								targetVersion: versionStr || undefined,
-							})
-						}
-					}
-				} catch {
-					/* ignore malformed manifests */
-				}
-			}
-
-			async function ingestPack(file, packPath) {
-				const zip = await ensureFflate()
-				const archive = zip.unzipSync(new Uint8Array(await file.arrayBuffer()))
-				const packName = packPath.split("/").pop() || "pack"
-				const packRoot =
-					"/virtual/user/" + packName.replace(/\.(?:mcpack|mcaddon)$/i, "")
-				const manifests = []
-
-				for (const [entryName, bytes] of Object.entries(archive)) {
-					const path = toUnix(entryName).replace(/^\/+/, "")
-					if (!path || path.endsWith("/") || SKIP_DIRS.test("/" + path))
-						continue
-
-					if (/(^|\/)manifest\.json$/i.test(path)) {
-						manifests.push({
-							path,
-							text: new TextDecoder().decode(bytes),
-						})
-						continue
-					}
-
-					if (!SOURCE_EXT.test(path)) continue
-					if (bytes.byteLength > MAX_FILE_SIZE) continue
-					addSourceFile(`${packRoot}/${path}`, new TextDecoder().decode(bytes))
-				}
-
-				for (const manifest of manifests) {
-					registerManifest(
-						manifest.text,
-						`${packRoot}/${manifest.path}`,
-						packRoot
-					)
-				}
-			}
-
 			async function ingestFiles(fileList) {
 				resetCaches()
 
-				const bar = $("#bar")
-				const barFill = bar ? bar.querySelector("i") : null
-				const setProgress = (pct) => {
-					if (barFill) barFill.style.width = pct
-				}
-				const showBar = () => {
-					if (bar) bar.classList.remove("hidden")
-				}
-				const hideBar = () => {
-					if (bar) setTimeout(() => bar.classList.add("hidden"), 400)
+				const progressBar = $("#bar")
+				const progressFill =
+					progressBar?.querySelector("i")
+
+				const setProgress = value => {
+					if (progressFill) {
+						progressFill.style.width = value
+					}
 				}
 
-				showBar()
+				const showProgress = () => {
+					progressBar?.classList.remove("hidden")
+				}
+
+				const hideProgress = () => {
+					if (progressBar) {
+						setTimeout(() => {
+							progressBar.classList.add("hidden")
+						}, 400)
+					}
+				}
+
+				showProgress()
 				setProgress("0%")
 
 				const manifests = []
+
 				for (let i = 0; i < fileList.length; i++) {
 					const { file, path } = fileList[i]
+
 					if (i % 20 === 0) {
-						setProgress(((i / fileList.length) * 100).toFixed(1) + "%")
+						setProgress(
+							((i / fileList.length) * 100).toFixed(1) +
+							"%"
+						)
+
 						await nextFrame()
 					}
+
 					if (SKIP_DIRS.test("/" + path)) continue
 
 					if (PACK_EXT.test(path)) {
@@ -1740,20 +2316,29 @@ declare var globalThis: any;
 							try {
 								await ingestPack(file, path)
 							} catch (error) {
-								bundleError = `Could not read ${path}: ${error.message || error}`
+								bundleError =
+									`Could not read ${path}: ` +
+									(error.message || error)
 							}
 						}
+
 						continue
 					}
 
 					if (!SOURCE_EXT.test(path)) {
-						if (/(^|\/)manifest\.json$/i.test(path)) {
-							if (file.size <= MAX_FILE_SIZE) {
-								manifests.push({ path: toUnix(path), text: await file.text() })
-							}
+						if (
+							/(^|\/)manifest\.json$/i.test(path) &&
+							file.size <= MAX_FILE_SIZE
+						) {
+							manifests.push({
+								path: toUnix(path),
+								text: await file.text()
+							})
 						}
+
 						continue
 					}
+
 					if (file.size > MAX_FILE_SIZE) continue
 
 					addSourceFile(path, await file.text())
@@ -1762,597 +2347,977 @@ declare var globalThis: any;
 				for (const manifest of manifests) {
 					registerManifest(
 						manifest.text,
-						"/virtual/user/" + manifest.path,
-						"/virtual/user"
+						"/virtual/user/" + manifest.path
 					)
 				}
+
 				renderModulePicker()
 
 				setProgress("100%")
-				hideBar()
+				hideProgress()
 
 				if (userFileCount > 1) {
 					try {
 						await ensureEsbuild()
-					} catch (e) {
-						bundleError = "esbuild load failed: " + (e.message || e)
+					} catch (error) {
+						bundleError =
+							"esbuild load failed: " +
+							(error.message || error)
 					}
+
 					if (!bundleError) {
 						try {
 							await bundleUserFiles()
-						} catch (e) {
-							bundleError = String(e)
+						} catch (error) {
+							bundleError = String(error)
 						}
 					}
 				}
 
 				updateStats()
 				updateTsNote()
-				$("#actions").style.display = userFileCount > 0 ? "flex" : "none"
+
+				$("#actions").style.display =
+					userFileCount > 0 ? "flex" : "none"
+
 				$("#results").innerHTML = ""
 			}
 
-			const TS_SYNTAX_RE =
-				/\b(interface\s+\w+|type\s+\w+\s*=|enum\s+\w+|namespace\s+\w+|declare\s+(module|const|function|class|namespace)|implements\s+\w+|<[A-Z]\w*(\s*,\s*[A-Z]\w*)*\s*>|\bas\s+[A-Z]\w*)/
-
-			function updateStats() {
-				const el = $("#stats")
-				if (!userFileCount) {
-					el.innerHTML = ""
-					return
-				}
-				let html = `<span><b>${userFileCount}</b> file${userFileCount === 1 ? "" : "s"}</span>`
-				if (bundleResult) {
-					const kb = (bundleResult.source.length / 1024).toFixed(1)
-					const srcCount = bundleResult.map.sources.length
-					html += `<span class="chip bundle">bundled · ${srcCount} source${srcCount === 1 ? "" : "s"} · ${kb} kB</span>`
-				} else if (userFileCount > 1 && bundleError) {
-					html += `<span class="chip warn" title="${esc(bundleError)}">bundle failed</span>`
-				} else if (userFileCount > 1) {
-					html += `<span class="chip multi">multi-file</span>`
-				}
-				el.innerHTML = html
-			}
-
-			function updateTsNote() {
-				const el = $("#tsNote")
-				if (!userFileCount) {
-					el.classList.add("hidden")
-					return
-				}
-				if (!userHasImport) {
-					el.classList.remove("hidden", "bad")
-					el.classList.add("warn")
-					el.textContent =
-						"⚠  No file imports a @minecraft/* module — every version will pass trivially."
-				} else if (bundleError && userFileCount > 1) {
-					el.classList.remove("hidden", "bad")
-					el.classList.add("warn")
-					el.textContent =
-						"⚠  " + bundleError + " — falling back to per-file compile."
-				} else {
-					el.classList.add("hidden")
-				}
-			}
-
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §11  ANALYSIS RUN
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-			function esc(s) {
-				return String(s).replace(
-					/[&<>"']/g,
-					(c) =>
-						({
-							"&": "&amp;",
-							"<": "&lt;",
-							">": "&gt;",
-							'"': "&quot;",
-							"'": "&#39;",
-						})[c]
-				)
-			}
-
 			function snippetFor(file, start, length) {
-				const src = userFiles.get(file)
-				if (!src) return null
-				const lineStart = src.lastIndexOf("\n", start - 1) + 1
-				const lineEnd = src.indexOf("\n", start + (length || 0))
-				const end = lineEnd === -1 ? src.length : lineEnd
-				const line = src.slice(lineStart, end)
-				const col = start - lineStart
-				const caretLen = Math.max(1, length || 1)
-				const trimmed = line.replace(/\t/g, "    ")
-				const pre = esc(trimmed.slice(0, col))
-				const mid = esc(trimmed.slice(col, col + caretLen))
-				const post = esc(trimmed.slice(col + caretLen))
-				return `${pre}<span class="caret">${mid || " "}</span>${post}`
-			}
+				const source = userFiles.get(file)
 
-			async function runAnalysis() {
-				const selected = selectedModuleIds()
-				if (!userFileCount) return
-				const resultsEl = $("#results")
+				if (!source) return null
 
-				if (!selected.length) {
-					resultsEl.innerHTML = `<div class="note-line bad">Select at least one module above.</div>`
-					return
-				}
+				const lineStart =
+					source.lastIndexOf("\n", start - 1) + 1
 
-				const run = ++currentRun
-				const btn = $("#analyze")
-				const includePre = $("#includePre").checked
-				const reverse = $("#reverseOrder").checked
-
-				btn.disabled = true
-				btn.textContent = "Loading TypeScript…"
-				resultsEl.innerHTML = ""
-
-				try {
-					await ensureTs()
-				} catch (e) {
-					btn.disabled = false
-					btn.textContent = "Find minimum versions"
-					resultsEl.innerHTML = `<div class="note-line bad">Failed to load TypeScript: ${esc(String(e))}</div>`
-					return
-				}
-				if (run !== currentRun) {
-					btn.disabled = false
-					return
-				}
-
-				btn.textContent = "Loading stdlib…"
-				await ensureLibs()
-				if (run !== currentRun) {
-					btn.disabled = false
-					return
-				}
-
-				btn.textContent = "Establishing baseline…"
-				await nextFrame()
-				try {
-					buildNoiseBaseline()
-				} catch (e) {
-					btn.disabled = false
-					btn.textContent = "Find minimum versions"
-					resultsEl.innerHTML = `<div class="note-line bad">Baseline compile failed: ${esc(String(e))}</div>`
-					return
-				}
-				if (run !== currentRun) {
-					btn.disabled = false
-					return
-				}
-
-				for (const moduleId of selected) {
-					if (run !== currentRun) {
-						btn.disabled = false
-						return
-					}
-					await sweepModule(moduleId, {
-						includePre,
-						reverse,
-						run,
-						resultsEl,
-						btn,
-					})
-				}
-
-				btn.disabled = false
-				btn.textContent = "Find minimum versions"
-			}
-
-			async function sweepModule(moduleId, ctx) {
-				const { includePre, reverse, run, resultsEl, btn } = ctx
-
-				// Target-version pre-check. When the source came from a folder
-				// with a manifest that declares a concrete version for this
-				// module, verify the code type-checks against that version
-				// BEFORE sweeping. If it doesn't, the manifest itself is
-				// broken — the sweep would be misleading, so we stop here.
-				const moduleInfo = MODULES.find((m) => m.id === moduleId)
-				const targetVersion = moduleInfo && moduleInfo.targetVersion
-				let targetOk = false
-				let targetUnavailable = false
-
-				if (targetVersion && !/beta/i.test(targetVersion)) {
-					btn.textContent = `Checking ${moduleId}@${targetVersion} (manifest target)…`
-					await nextFrame()
-					if (run !== ctx.run) return
-
-					let dts = null
-					try {
-						dts = await fetchDts(moduleId, targetVersion)
-					} catch {
-						dts = null
-					}
-					if (run !== ctx.run) return
-
-					if (dts == null) {
-						targetUnavailable = true
-					} else {
-						const check = checkVersion(moduleId, dts)
-						if (check.state !== "ok") {
-							renderTargetFailure(resultsEl, moduleId, targetVersion, check)
-							return
-						}
-						targetOk = true
-					}
-				}
-
-				btn.textContent = `Fetching ${moduleId} versions…`
-				let versions
-				try {
-					versions = await fetchVersions(moduleId)
-				} catch {
-					appendNote(resultsEl, moduleId, `Failed to fetch version list.`)
-					return
-				}
-				versions = versions.filter((v) => includePre || !v.includes("-"))
-
-				// Normal mode: oldest → newest (find the first working version).
-				// Reverse mode: newest → oldest (stop at the first broken version).
-				versions.sort(reverse ? (a, b) => cmpVer(b, a) : cmpVer)
-
-				if (!versions.length) {
-					appendNote(resultsEl, moduleId, `No published versions.`)
-					return
-				}
-				if (run !== ctx.run) return
-
-				const targetChip = targetOk
-					? `<span class="chip" style="color:var(--ok);border-color:#1f5a2a;background:#0e1a0e;font-size:9px;padding:1px 6px;margin-left:6px">target ${esc(targetVersion)} ✔</span>`
-					: targetUnavailable
-						? `<span class="chip" style="color:var(--warn);border-color:#3a2a15;background:#1f1508;font-size:9px;padding:1px 6px;margin-left:6px">target ${esc(targetVersion)} unavailable</span>`
-						: ""
-
-				const section = document.createElement("div")
-				section.className = "mod-section"
-				section.innerHTML = `
-    <div class="mod-section-header">
-      <span class="name">${esc(moduleId)}${targetChip}</span>
-      <span class="status">${versions.length} versions</span>
-    </div>
-    <div class="rows"></div>
-  `
-				resultsEl.appendChild(section)
-				const rowsEl = section.querySelector(".rows")
-
-				const rows = []
-				for (const v of versions) {
-					const row = document.createElement("div")
-					row.className = "row"
-					row.dataset.state = "pending"
-					row.dataset.version = v
-					row.innerHTML = `<div class="ver">${esc(v)}</div>
-      <div class="body"><div class="status"><span class="icon"><i class="spinner"></i></span><span class="note">checking…</span><span class="time"></span></div></div>`
-					rowsEl.appendChild(row)
-					rows.push(row)
-				}
-
-				// Pass 1: check every version (or stop early in reverse mode).
-				const rawResults = new Array(versions.length).fill(null)
-				const compiledContents = new Set()
-				// `stoppedAt` = index of the first failing version in reverse mode.
-				// Everything after it is left unchecked, and we mark the rows accordingly.
-				let stoppedAt = -1
-
-				for (let i = 0; i < versions.length; i++) {
-					if (run !== ctx.run) return
-					const v = versions[i]
-					btn.textContent = `${moduleId} · ${v} (${i + 1}/${versions.length})…`
-
-					const tStart = performance.now()
-					let result,
-						wasDup = false
-					try {
-						const dts = await fetchDts(moduleId, v)
-						if (dts == null) {
-							result = { state: "unknown", errors: null }
-						} else {
-							wasDup = compiledContents.has(dts)
-							result = checkVersion(moduleId, dts)
-							compiledContents.add(dts)
-						}
-					} catch {
-						result = { state: "unknown", errors: null }
-					}
-					const elapsed = performance.now() - tStart
-					if (run !== ctx.run) return
-
-					rawResults[i] = { result, elapsed, wasDup }
-					renderRow(rows[i], result, { elapsed, wasDup })
-					await nextFrame()
-
-					// Reverse mode: once we see a failure, every older version
-					// would also fail (or is irrelevant), so we stop the sweep
-					// to save bandwidth and compile time.
-					if (reverse && result.state === "fail") {
-						stoppedAt = i
-						break
-					}
-				}
-
-				// Mark unchecked rows (only possible in reverse mode).
-				if (stoppedAt >= 0) {
-					for (let i = stoppedAt + 1; i < versions.length; i++) {
-						rows[i].dataset.state = "unknown"
-						rows[i].querySelector(".body").innerHTML =
-							`<div class="status"><span class="icon" style="color:var(--dim2)">–</span><span class="note">skipped (older than first failure)</span></div>`
-					}
-				}
-
-				// Pass 2: errors present in every version.
-				// Only meaningful when the sweep ran to completion. In reverse
-				// mode with an early stop we don't have a full sample, so we skip it.
-				const compiledResults = rawResults.filter(
-					(r) => r && r.result.state !== "unknown"
+				const lineEnd = source.indexOf(
+					"\n",
+					start + (length || 0)
 				)
-				let commonKeys = null
-				if (
-					stoppedAt < 0 &&
-					compiledResults.length > 0 &&
-					compiledResults.every((r) => r.result.state === "fail")
-				) {
-					for (const r of compiledResults) {
-						const keys = new Set(r.result.errors.map(errorKey))
-						if (commonKeys === null) commonKeys = keys
-						else {
-							for (const k of commonKeys) if (!keys.has(k)) commonKeys.delete(k)
-							if (commonKeys.size === 0) break
-						}
-					}
-				}
-				if (commonKeys === null) commonKeys = new Set()
 
-				const commonErrors = []
-				if (commonKeys.size > 0) {
-					for (const r of compiledResults) {
-						const seen = new Set()
-						for (const e of r.result.errors) {
-							const k = errorKey(e)
-							if (commonKeys.has(k) && !seen.has(k)) {
-								seen.add(k)
-								commonErrors.push(e)
-							}
-						}
-						if (commonErrors.length) break
-					}
-				}
+				const end =
+					lineEnd === -1 ? source.length : lineEnd
 
-				// Pass 3: re-render with common errors subtracted + verdict.
-				const states = new Array(versions.length).fill("unknown")
-				for (let i = 0; i < versions.length; i++) {
-					const r = rawResults[i]
-					if (!r || r.result.state === "unknown") {
-						// Skipped rows keep the "skipped" note we wrote above.
-						if (stoppedAt >= 0 && i > stoppedAt) continue
-						states[i] = "unknown"
-						continue
-					}
-					const filtered = r.result.errors.filter(
-						(e) => !commonKeys.has(errorKey(e))
+				const line = source.slice(lineStart, end)
+				const column = start - lineStart
+				const caretLength = Math.max(1, length || 1)
+
+				const trimmed = line.replace(/\t/g, "    ")
+
+				const before = escapeHtml(
+					trimmed.slice(0, column)
+				)
+
+				const highlighted = escapeHtml(
+					trimmed.slice(
+						column,
+						column + caretLength
 					)
-					if (filtered.length === 0) {
-						states[i] = "ok"
-						renderRow(
-							rows[i],
-							{ state: "ok", errors: null },
-							{ elapsed: r.elapsed, wasDup: r.wasDup }
-						)
-					} else {
-						states[i] = "fail"
-						renderRow(
-							rows[i],
-							{ state: "fail", errors: filtered },
-							{ elapsed: r.elapsed, wasDup: r.wasDup }
-						)
-					}
-				}
+				)
 
-				// Find the minimum version.
-				//  - Normal mode: array is ascending → min is the FIRST ok.
-				//  - Reverse mode: array is descending → min is the LAST ok
-				//    before the first failure.
-				let minIdx = -1
-				if (reverse) {
-					for (let i = 0; i < versions.length; i++) {
-						if (states[i] === "ok") minIdx = i
-						else if (states[i] === "fail") break
-					}
-				} else {
-					minIdx = states.findIndex((s) => s === "ok")
-				}
+				const after = escapeHtml(
+					trimmed.slice(column + caretLength)
+				)
 
-				if (minIdx >= 0) {
-					rows[minIdx].classList.add("min")
-					const badge = document.createElement("span")
-					badge.className = "badge"
-					badge.textContent = "MINIMUM"
-					rows[minIdx].querySelector(".ver").appendChild(badge)
-					section.querySelector(".status").innerHTML =
-						`<span style="color:var(--ok)">✔</span> minimum ${esc(versions[minIdx])}`
-				} else if (stoppedAt >= 0 && states[0] === "fail") {
-					// Reverse mode hit a failure on the very first (newest) version.
-					section.querySelector(".status").innerHTML =
-						`<span style="color:var(--bad)">✕</span> latest failed — untick "newest first" to sweep all`
-				} else if (states.every((s) => s === "unknown")) {
-					section.querySelector(".status").textContent = "no types available"
-				} else {
-					section.querySelector(".status").innerHTML =
-						`<span style="color:var(--bad)">✕</span> no version satisfies`
-				}
-
-				if (commonKeys.size > 0) {
-					const uniq = new Map()
-					for (const e of commonErrors) {
-						const k = `${e.file}:${e.line}:${e.code}`
-						if (!uniq.has(k)) uniq.set(k, e)
-					}
-					const list = [...uniq.values()]
-					const div = document.createElement("div")
-					div.className = "note-line warn"
-					div.style.marginTop = "10px"
-					let body =
-						`${list.length} version-independent error${list.length === 1 ? "" : "s"} ` +
-						`ignored (present in every version — likely bugs in your own code):`
-					body += `<details><summary>show</summary><ul style="margin:6px 0 0;padding-left:18px;line-height:1.7">`
-					for (const e of list.slice(0, 20)) {
-						const short = e.file.split("/").pop()
-						body += `<li>TS${e.code} · ${esc(short)}:${e.line}:${e.col} — ${esc(e.message)}</li>`
-					}
-					if (list.length > 20)
-						body += `<li>… and ${list.length - 20} more</li>`
-					body += `</ul></details>`
-					div.innerHTML = body
-					section.appendChild(div)
-				}
+				return (
+					before +
+					`<span class="caret">${highlighted || " "}</span>` +
+					after
+				)
 			}
 
-			function appendNote(resultsEl, moduleId, msg) {
-				const div = document.createElement("div")
-				div.className = "mod-section"
-				div.innerHTML = `
-    <div class="mod-section-header">
-      <span class="name">${esc(moduleId)}</span>
-      <span class="status" style="color:var(--bad)">${esc(msg)}</span>
-    </div>`
-				resultsEl.appendChild(div)
+			function appendNote(resultsElement, moduleId, message) {
+				const section = document.createElement("div")
+
+				section.className = "mod-section"
+
+				section.innerHTML = `
+					<div class="mod-section-header">
+						<span class="name">${escapeHtml(moduleId)}</span>
+						<span class="status" style="color:var(--bad)">
+							${escapeHtml(message)}
+						</span>
+					</div>
+				`
+
+				resultsElement.appendChild(section)
 			}
 
-			function renderTargetFailure(resultsEl, moduleId, targetVersion, result) {
+			function renderTargetFailure(
+				resultsElement,
+				moduleId,
+				targetVersion,
+				result
+			) {
 				const section = document.createElement("div")
 				section.className = "mod-section"
+
 				section.innerHTML = `
-    <div class="mod-section-header">
-      <span class="name">${esc(moduleId)}</span>
-      <span class="status" style="color:var(--bad)">✕ manifest target ${esc(targetVersion)} fails — sweep skipped</span>
-    </div>
-  `
+					<div class="mod-section-header">
+						<span class="name">${escapeHtml(moduleId)}</span>
+						<span class="status" style="color:var(--bad)">
+							✕ manifest target ${escapeHtml(targetVersion)} fails — sweep skipped
+						</span>
+					</div>
+				`
+
 				const row = document.createElement("div")
+
 				row.className = "row"
-				row.innerHTML = `<div class="ver">${esc(targetVersion)}</div><div class="body"></div>`
+				row.innerHTML = `
+					<div class="ver">${escapeHtml(targetVersion)}</div>
+					<div class="body"></div>
+				`
+
 				section.appendChild(row)
+
 				renderRow(
 					row,
-					{ state: "fail", errors: result.errors },
-					{ elapsed: null, wasDup: false }
+					{
+						state: "fail",
+						errors: result.errors
+					},
+					{
+						elapsed: null,
+						wasDup: false
+					}
 				)
 
 				const note = document.createElement("div")
+
 				note.className = "note-line warn"
 				note.style.marginTop = "10px"
+
 				note.textContent =
 					"The manifest declares this version, but the code has type errors against it. " +
 					"Fix the errors above (or update the manifest version), then re-run."
+
 				section.appendChild(note)
-
-				resultsEl.appendChild(section)
+				resultsElement.appendChild(section)
 			}
-
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §12  ROW RENDERING
-   ═══════════════════════════════════════════════════════════════════════════ */
 
 			function renderRow(row, result, meta) {
 				row.dataset.state = result.state
-				if (meta && meta.wasDup) row.classList.add("dup")
-				else row.classList.remove("dup")
 
-				const ICON = { ok: "✔", fail: "✕", unknown: "–" }
-				const COLOR = {
+				if (meta?.wasDup) {
+					row.classList.add("dup")
+				} else {
+					row.classList.remove("dup")
+				}
+
+				const icons = {
+					ok: "✔",
+					fail: "✕",
+					unknown: "–"
+				}
+
+				const colors = {
 					ok: "var(--ok)",
 					fail: "var(--bad)",
-					unknown: "var(--dim2)",
+					unknown: "var(--dim2)"
 				}
 
-				let html = `<div class="status">`
-				html += `<span class="icon" style="color:${COLOR[result.state] || "var(--dim2)"}">${ICON[result.state] || ""}</span>`
-				html += `<span class="note">`
-				if (result.state === "ok") html += "type-checks cleanly"
-				else if (result.state === "unknown")
+				let html = `
+					<div class="status">
+						<span
+							class="icon"
+							style="color:${colors[result.state] || "var(--dim2)"}"
+						>
+							${icons[result.state] || ""}
+						</span>
+						<span class="note">
+				`
+
+				if (result.state === "ok") {
+					html += "type-checks cleanly"
+				} else if (result.state === "unknown") {
 					html += "type declarations unavailable"
-				else if (result.state === "fail") {
-					const n = result.errors.length
-					html += `${n} API error${n === 1 ? "" : "s"}`
+				} else if (result.state === "fail") {
+					const count = result.errors.length
+
+					html +=
+						`${count} API error` +
+						(count === 1 ? "" : "s")
 				}
-				html += `</span>`
+
+				html += "</span>"
+
 				if (meta?.wasDup) {
-					html += `<span class="cat cascade" title="same .d.ts as a previous version — result cached">reused</span>`
+					html += `
+						<span
+							class="cat cascade"
+							title="same .d.ts as a previous version — result cached"
+						>
+							reused
+						</span>
+					`
 				}
+
 				if (
 					meta?.elapsed != null &&
 					result.state !== "unknown" &&
 					!meta.wasDup
 				) {
-					html += `<span class="time">${meta.elapsed.toFixed(0)} ms</span>`
+					html += `
+						<span class="time">
+							${meta.elapsed.toFixed(0)} ms
+						</span>
+					`
 				}
-				html += `</div>`
 
-				if (result.state === "fail" && result.errors.length) {
-					const counts = new Map()
-					for (const e of result.errors) {
-						const c = CATEGORY[e.code] || "other"
-						counts.set(c, (counts.get(c) || 0) + 1)
+				html += "</div>"
+
+				if (
+					result.state === "fail" &&
+					result.errors.length
+				) {
+					const categories = new Map()
+
+					for (const error of result.errors) {
+						const category =
+							ERROR_CATEGORY[error.code] ||
+							"other"
+
+						categories.set(
+							category,
+							(categories.get(category) || 0) + 1
+						)
 					}
+
 					html += `<div class="cats">`
-					for (const [cat, n] of [...counts].sort((a, b) => b[1] - a[1])) {
-						html += `<span class="cat ${cat}">${cat} · ${n}</span>`
-					}
-					html += `</div>`
 
-					const byFile = new Map()
-					for (const e of result.errors) {
-						if (!byFile.has(e.file)) byFile.set(e.file, [])
-						byFile.get(e.file).push(e)
+					for (const [category, count] of [...categories]
+						.sort((a, b) => b[1] - a[1])) {
+						html +=
+							`<span class="cat ${category}">` +
+							`${category} · ${count}</span>`
 					}
-					html += `<details><summary>show errors (${result.errors.length})</summary>`
+
+					html += "</div>"
+
+					const errorsByFile = new Map()
+
+					for (const error of result.errors) {
+						if (!errorsByFile.has(error.file)) {
+							errorsByFile.set(error.file, [])
+						}
+
+						errorsByFile.get(error.file).push(error)
+					}
+
+					html +=
+						`<details>` +
+						`<summary>show errors (${result.errors.length})</summary>`
+
 					let shown = 0
-					outer: for (const [file, errs] of byFile) {
-						const short = file.split("/").slice(-2).join("/")
-						html += `<div class="errgroup"><div class="filehead">${esc(short)}</div>`
-						for (const e of errs) {
+
+					outer:
+					for (const [file, errors] of errorsByFile) {
+						const shortName = file
+							.split("/")
+							.slice(-2)
+							.join("/")
+
+						html +=
+							`<div class="errgroup">` +
+							`<div class="filehead">${escapeHtml(shortName)}</div>`
+
+						for (const error of errors) {
 							if (shown >= 60) {
 								html += `<div class="err">…</div>`
 								break outer
 							}
-							const snippet = snippetFor(file, e.start, e.length)
-							html += `<div class="err">`
-							html += `<div class="head"><span class="code">TS${e.code}</span> <span class="pos">${e.line}:${e.col}</span> — ${esc(e.message)}</div>`
-							if (snippet) html += `<pre>${snippet}</pre>`
-							html += `</div>`
+
+							const snippet = snippetFor(
+								file,
+								error.start,
+								error.length
+							)
+
+							html += `
+								<div class="err">
+									<div class="head">
+										<span class="code">TS${error.code}</span>
+										<span class="pos">${error.line}:${error.col}</span>
+										— ${escapeHtml(error.message)}
+									</div>
+							`
+
+							if (snippet) {
+								html += `<pre>${snippet}</pre>`
+							}
+
+							html += "</div>"
 							shown++
 						}
-						html += `</div>`
+
+						html += "</div>"
 					}
+
 					if (result.errors.length > shown) {
-						html += `<div class="errgroup"><div class="filehead" style="color:var(--dim2)">… and ${result.errors.length - shown} more</div></div>`
+						html += `
+							<div class="errgroup">
+								<div
+									class="filehead"
+									style="color:var(--dim2)"
+								>
+									… and ${result.errors.length - shown} more
+								</div>
+							</div>
+						`
 					}
-					html += `</details>`
+
+					html += "</details>"
 				}
+
 				row.querySelector(".body").innerHTML = html
 			}
 
-			/* ═══════════════════════════════════════════════════════════════════════════
-   §13  BOOTSTRAP
-   ═══════════════════════════════════════════════════════════════════════════ */
+			async function sweepModule(moduleId, context) {
+				const {
+					includePre,
+					reverse,
+					run,
+					resultsEl,
+					button
+				} = context
 
-			document.querySelectorAll(".tabs button").forEach((btn) => {
-				btn.addEventListener("click", () => {
-					document
-						.querySelectorAll(".tabs button")
-						.forEach((b) => b.classList.toggle("active", b === btn))
-					$("#tab-folder").classList.toggle(
-						"hidden",
-						btn.dataset.tab !== "folder"
+				const moduleInfo = MODULES.find(
+					module => module.id === moduleId
+				)
+
+				const targetVersion =
+					moduleInfo?.targetVersion
+
+				let targetOk = false
+				let targetUnavailable = false
+
+				if (
+					targetVersion &&
+					!/beta/i.test(targetVersion)
+				) {
+					button.textContent =
+						`Checking ${moduleId}@${targetVersion} ` +
+						"(manifest target)…"
+
+					await nextFrame()
+
+					if (run !== currentRun) return
+
+					let types = null
+
+					try {
+						types = await fetchDts(
+							moduleId,
+							targetVersion
+						)
+					} catch {
+						types = null
+					}
+
+					if (run !== currentRun) return
+
+					if (types == null) {
+						targetUnavailable = true
+					} else {
+						const result = checkVersion(
+							moduleId,
+							types
+						)
+
+						if (result.state !== "ok") {
+							renderTargetFailure(
+								resultsEl,
+								moduleId,
+								targetVersion,
+								result
+							)
+
+							return
+						}
+
+						targetOk = true
+					}
+				}
+
+				button.textContent =
+					`Fetching ${moduleId} versions…`
+
+				let versions
+
+				try {
+					versions = await fetchVersions(moduleId)
+				} catch {
+					appendNote(
+						resultsEl,
+						moduleId,
+						"Failed to fetch version list."
 					)
-					$("#tab-paste").classList.toggle(
-						"hidden",
-						btn.dataset.tab !== "paste"
+
+					return
+				}
+
+				versions = versions.filter(
+					version =>
+						includePre ||
+						!version.includes("-")
+				)
+
+				versions.sort(
+					reverse
+						? (a, b) =>
+							compareVersions(b, a)
+						: compareVersions
+				)
+
+				if (!versions.length) {
+					appendNote(
+						resultsEl,
+						moduleId,
+						"No published versions."
 					)
+
+					return
+				}
+
+				if (run !== currentRun) return
+
+				let targetChip = ""
+
+				if (targetOk) {
+					targetChip =
+						`<span class="chip" ` +
+						`style="color:var(--ok);border-color:#1f5a2a;background:#0e1a0e;font-size:9px;padding:1px 6px;margin-left:6px">` +
+						`target ${escapeHtml(targetVersion)} ✔</span>`
+				} else if (targetUnavailable) {
+					targetChip =
+						`<span class="chip" ` +
+						`style="color:var(--warn);border-color:#3a2a15;background:#1f1508;font-size:9px;padding:1px 6px;margin-left:6px">` +
+						`target ${escapeHtml(targetVersion)} unavailable</span>`
+				}
+
+				const section = document.createElement("div")
+
+				section.className = "mod-section"
+
+				section.innerHTML = `
+					<div class="mod-section-header">
+						<span class="name">
+							${escapeHtml(moduleId)}${targetChip}
+						</span>
+						<span class="status">
+							${versions.length} versions
+						</span>
+					</div>
+
+					<div class="rows"></div>
+				`
+
+				resultsEl.appendChild(section)
+
+				const rowsElement = section.querySelector(".rows")
+				const rows = []
+
+				for (const version of versions) {
+					const row = document.createElement("div")
+
+					row.className = "row"
+					row.dataset.state = "pending"
+					row.dataset.version = version
+
+					row.innerHTML = `
+						<div class="ver">
+							${escapeHtml(version)}
+						</div>
+
+						<div class="body">
+							<div class="status">
+								<span class="icon">
+									<i class="spinner"></i>
+								</span>
+								<span class="note">checking…</span>
+								<span class="time"></span>
+							</div>
+						</div>
+					`
+
+					rowsElement.appendChild(row)
+					rows.push(row)
+				}
+
+				const results = new Array(versions.length).fill(null)
+				const compiledTypes = new Set()
+
+				let stoppedAt = -1
+
+				for (let index = 0; index < versions.length; index++) {
+					if (run !== currentRun) return
+
+					const version = versions[index]
+
+					button.textContent =
+						`${moduleId} · ${version} ` +
+						`(${index + 1}/${versions.length})…`
+
+					const startedAt = performance.now()
+
+					let result
+					let reused = false
+
+					try {
+						const types = await fetchDts(
+							moduleId,
+							version
+						)
+
+						if (types == null) {
+							result = {
+								state: "unknown",
+								errors: null
+							}
+						} else {
+							reused = compiledTypes.has(types)
+
+							result = checkVersion(
+								moduleId,
+								types
+							)
+
+							compiledTypes.add(types)
+						}
+					} catch {
+						result = {
+							state: "unknown",
+							errors: null
+						}
+					}
+
+					const elapsed =
+						performance.now() - startedAt
+
+					if (run !== currentRun) return
+
+					results[index] = {
+						result,
+						elapsed,
+						wasDup: reused
+					}
+
+					renderRow(rows[index], result, {
+						elapsed,
+						wasDup: reused
+					})
+
+					await nextFrame()
+
+					if (
+						reverse &&
+						result.state === "fail"
+					) {
+						stoppedAt = index
+						break
+					}
+				}
+
+				if (stoppedAt >= 0) {
+					for (
+						let index = stoppedAt + 1;
+						index < versions.length;
+						index++
+					) {
+						rows[index].dataset.state =
+							"unknown"
+
+						rows[index].querySelector(
+							".body"
+						).innerHTML = `
+							<div class="status">
+								<span
+									class="icon"
+									style="color:var(--dim2)"
+								>
+									–
+								</span>
+								<span class="note">
+									skipped (older than first failure)
+								</span>
+							</div>
+						`
+					}
+				}
+
+				const compiledResults = results.filter(
+					entry =>
+						entry &&
+						entry.result.state !== "unknown"
+				)
+
+				let commonKeys = null
+
+				if (
+					stoppedAt < 0 &&
+					compiledResults.length > 0 &&
+					compiledResults.every(
+						entry =>
+							entry.result.state === "fail"
+					)
+				) {
+					for (const entry of compiledResults) {
+						const keys = new Set(
+							entry.result.errors.map(errorKey)
+						)
+
+						if (commonKeys === null) {
+							commonKeys = keys
+							continue
+						}
+
+						for (const key of commonKeys) {
+							if (!keys.has(key)) {
+								commonKeys.delete(key)
+							}
+						}
+
+						if (!commonKeys.size) break
+					}
+				}
+
+				if (commonKeys === null) {
+					commonKeys = new Set()
+				}
+
+				const commonErrors = []
+
+				if (commonKeys.size) {
+					for (const entry of compiledResults) {
+						const seen = new Set()
+
+						for (const error of entry.result.errors) {
+							const key = errorKey(error)
+
+							if (
+								commonKeys.has(key) &&
+								!seen.has(key)
+							) {
+								seen.add(key)
+								commonErrors.push(error)
+							}
+						}
+
+						if (commonErrors.length) break
+					}
+				}
+
+				const states = new Array(versions.length)
+					.fill("unknown")
+
+				for (
+					let index = 0;
+					index < versions.length;
+					index++
+				) {
+					const entry = results[index]
+
+					if (
+						!entry ||
+						entry.result.state === "unknown"
+					) {
+						if (
+							stoppedAt >= 0 &&
+							index > stoppedAt
+						) {
+							continue
+						}
+
+						states[index] = "unknown"
+						continue
+					}
+
+					const remainingErrors =
+						entry.result.errors.filter(
+							error =>
+								!commonKeys.has(
+									errorKey(error)
+								)
+						)
+
+					if (!remainingErrors.length) {
+						states[index] = "ok"
+
+						renderRow(
+							rows[index],
+							{
+								state: "ok",
+								errors: null
+							},
+							{
+								elapsed: entry.elapsed,
+								wasDup: entry.wasDup
+							}
+						)
+					} else {
+						states[index] = "fail"
+
+						renderRow(
+							rows[index],
+							{
+								state: "fail",
+								errors: remainingErrors
+							},
+							{
+								elapsed: entry.elapsed,
+								wasDup: entry.wasDup
+							}
+						)
+					}
+				}
+
+				let minimumIndex = -1
+
+				if (reverse) {
+					for (
+						let index = 0;
+						index < versions.length;
+						index++
+					) {
+						if (states[index] === "ok") {
+							minimumIndex = index
+						} else if (
+							states[index] === "fail"
+						) {
+							break
+						}
+					}
+				} else {
+					minimumIndex = states.findIndex(
+						state => state === "ok"
+					)
+				}
+
+				const sectionStatus =
+					section.querySelector(
+						".mod-section-header .status"
+					)
+
+				if (minimumIndex >= 0) {
+					rows[minimumIndex].classList.add("min")
+
+					const badge =
+						document.createElement("span")
+
+					badge.className = "badge"
+					badge.textContent = "MINIMUM"
+
+					rows[minimumIndex]
+						.querySelector(".ver")
+						.appendChild(badge)
+
+					sectionStatus.innerHTML =
+						`<span style="color:var(--ok)">✔</span> ` +
+						`minimum ${escapeHtml(versions[minimumIndex])}`
+				} else if (
+					stoppedAt >= 0 &&
+					states[0] === "fail"
+				) {
+					sectionStatus.innerHTML =
+						`<span style="color:var(--bad)">✕</span> ` +
+						`latest failed — untick "newest first" to sweep all`
+				} else if (
+					states.every(state => state === "unknown")
+				) {
+					sectionStatus.textContent =
+						"no types available"
+				} else {
+					sectionStatus.innerHTML =
+						`<span style="color:var(--bad)">✕</span> ` +
+						`no version satisfies`
+				}
+
+				if (commonKeys.size) {
+					const uniqueErrors = new Map()
+
+					for (const error of commonErrors) {
+						const key =
+							`${error.file}:${error.line}:${error.code}`
+
+						if (!uniqueErrors.has(key)) {
+							uniqueErrors.set(key, error)
+						}
+					}
+
+					const errors = [...uniqueErrors.values()]
+					const note = document.createElement("div")
+
+					note.className = "note-line warn"
+					note.style.marginTop = "10px"
+
+					let html =
+						`${errors.length} version-independent error` +
+						`${errors.length === 1 ? "" : "s"} ignored ` +
+						`(present in every version — likely bugs in your own code):`
+
+					html +=
+						`<details>` +
+						`<summary>show</summary>` +
+						`<ul style="margin:6px 0 0;padding-left:18px;line-height:1.7">`
+
+					for (const error of errors.slice(0, 20)) {
+						const fileName =
+							error.file.split("/").pop()
+
+						html +=
+							`<li>TS${error.code} · ` +
+							`${escapeHtml(fileName)}:${error.line}:${error.col} — ` +
+							`${escapeHtml(error.message)}</li>`
+					}
+
+					if (errors.length > 20) {
+						html +=
+							`<li>… and ${errors.length - 20} more</li>`
+					}
+
+					html += "</ul></details>"
+
+					note.innerHTML = html
+					section.appendChild(note)
+				}
+			}
+
+			async function runAnalysis() {
+				const selectedModules = getSelectedModules()
+
+				if (!userFileCount) return
+
+				const results = $("#results")
+
+				if (!selectedModules.length) {
+					results.innerHTML =
+						`<div class="note-line bad">` +
+						`Select at least one module above.` +
+						`</div>`
+
+					return
+				}
+
+				const run = ++currentRun
+				const button = $("#analyze")
+
+				const includePre =
+					$("#includePre").checked
+
+				const reverse =
+					$("#reverseOrder").checked
+
+				button.disabled = true
+				button.textContent =
+					"Loading TypeScript…"
+
+				results.innerHTML = ""
+
+				try {
+					await ensureTs()
+				} catch (error) {
+					button.disabled = false
+					button.textContent =
+						"Find minimum versions"
+
+					results.innerHTML =
+						`<div class="note-line bad">` +
+						`Failed to load TypeScript: ` +
+						`${escapeHtml(String(error))}</div>`
+
+					return
+				}
+
+				if (run !== currentRun) {
+					button.disabled = false
+					return
+				}
+
+				button.textContent = "Loading stdlib…"
+
+				await ensureLibs()
+
+				if (run !== currentRun) {
+					button.disabled = false
+					return
+				}
+
+				button.textContent =
+					"Establishing baseline…"
+
+				await nextFrame()
+
+				try {
+					buildNoiseBaseline()
+				} catch (error) {
+					button.disabled = false
+					button.textContent =
+						"Find minimum versions"
+
+					results.innerHTML =
+						`<div class="note-line bad">` +
+						`Baseline compile failed: ` +
+						`${escapeHtml(String(error))}</div>`
+
+					return
+				}
+
+				if (run !== currentRun) {
+					button.disabled = false
+					return
+				}
+
+				for (const moduleId of selectedModules) {
+					if (run !== currentRun) {
+						button.disabled = false
+						return
+					}
+
+					await sweepModule(moduleId, {
+						includePre,
+						reverse,
+						run,
+						resultsEl: results,
+						button
+					})
+				}
+
+				button.disabled = false
+				button.textContent =
+					"Find minimum versions"
+			}
+
+			document
+				.querySelectorAll(".tabs button")
+				.forEach(button => {
+					button.addEventListener("click", () => {
+						document
+							.querySelectorAll(".tabs button")
+							.forEach(tab => {
+								tab.classList.toggle(
+									"active",
+									tab === button
+								)
+							})
+
+						$("#tab-folder").classList.toggle(
+							"hidden",
+							button.dataset.tab !== "folder"
+						)
+
+						$("#tab-paste").classList.toggle(
+							"hidden",
+							button.dataset.tab !== "paste"
+						)
+					})
 				})
-			})
 
-			$("#analyze").addEventListener("click", runAnalysis)
+			$("#analyze").addEventListener(
+				"click",
+				runAnalysis
+			)
 
 			renderModulePicker()
 			wireModulePicker()
